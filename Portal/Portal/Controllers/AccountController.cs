@@ -135,8 +135,8 @@ namespace Portal.Controllers
         public ActionResult Register()
         {
             List<SelectListItem> choice = new List<SelectListItem>();
-            choice.Add(new SelectListItem { Text = "Join to already existing", Value = Boolean.FalseString, Selected = true });
-            choice.Add(new SelectListItem { Text = "Create new", Value = Boolean.TrueString, Selected = false });
+            choice.Add(new SelectListItem { Text = "Join to already existing", Value = Boolean.TrueString, Selected = true });
+            choice.Add(new SelectListItem { Text = "Create new", Value = Boolean.FalseString, Selected = false });
 
             ViewBag.Choice = choice;
             return View();
