@@ -1,0 +1,30 @@
+﻿@model Portal.Models.ViewModels.IndexViewModel
+@{
+    ViewBag.Title = "Manage";
+}
+
+<h2>@ViewBag.Title.</h2>
+
+<p class="text-success">@ViewBag.StatusMessage</p>
+<div>
+    <h4>Change your account settings</h4>
+    <hr/>
+    <a type="button" class="text-center btn btn-primary" href=@Url.Action("ChangeUserData")>
+        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+        &nbsp;Change data
+    </a>
+    @if (Model.HasPassword)
+    {
+        <a type="button" class="text-center btn btn-primary" href=@Url.Action("ChangePassword")>
+            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+            &nbsp;Change password
+        </a>
+    }
+    else
+    {
+        <a type="button" class="text-center btn btn-primary" href=@Url.Action("SetPassword")>
+            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+            &nbsp;Set password
+        </a>
+    }
+</div>

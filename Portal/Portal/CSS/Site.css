@@ -1,0 +1,142 @@
+﻿body {
+    padding-bottom: 20px;
+    padding-top: 50px;
+}
+
+button[class="navbar-toggle"],
+button[class="navbar-toggle collapsed"],
+button[class="btn btn-default navbar-btn"],
+button[class="btn btn-default navbar-btn navbar-toggle"],
+button[class="btn btn-default navbar-btn navbar-toggle collapsed"],
+button[class="dropdown btn btn-default navbar-btn navbar-toggle"],
+button[class="dropdown btn btn-default navbar-btn navbar-toggle open"] {
+    padding-bottom: 6px;
+    padding-top: 6px;
+}
+
+div [class="btn-group navbar-brand"] {
+    padding-bottom: 0;
+    padding-top: 0;
+    width: 30%;
+}
+
+.cnv-title-settings {
+    display: flex;
+    top: 4em;
+}
+
+.cnv-title {
+    font-size: 24px;
+    width: calc(100% - 48px);
+}
+
+.cnv-cog {
+    font-size: 24px;
+    height: 49px;
+    width: 48px;
+}
+
+.glyphicon-tint { color: darkblue; }
+
+.glyphicon-fire { color: darkred; }
+
+.glyphicon-leaf { color: darkgreen; }
+
+/*.glyphicon { font-size: 80px; }*/
+
+/* Set padding to keep content from hitting the edges */
+
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+
+.dl-horizontal dt { white-space: normal; }
+
+/* Set width on the form input elements since they're 100% wide by default */
+
+input,
+select,
+textarea { max-width: 280px; }
+
+.chat-title {
+    text-align: center;
+    /*padding-right: 0;*/
+    top: 4em;
+}
+
+.messages-output {
+    background-color: #FFFFFF;
+    bottom: 4em;
+    overflow: hidden;
+    overflow-y: scroll;
+    /*padding-left: 0;
+    padding-right: 0;*/
+    top: 8em;
+    width: 100%;
+}
+
+.input-box {
+    background-color: transparent;
+    bottom: 3em;
+    max-width: none;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.input-container {
+    background-color: transparent;
+    display: inline-block;
+    max-width: none;
+    min-width: 1px;
+    padding-left: 0;
+    padding-right: 0;
+    width: calc(100% - 85px);
+}
+
+.myinput {
+    max-width: none;
+    min-height: 45px;
+    resize: none;
+    width: 100%;
+}
+
+.button-container {
+    background-color: transparent;
+    display: inline-block;
+    float: right;
+    margin-right: 0px;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.mybutton {
+    width: 100%;
+    width: 80px;
+}
+
+.mystatement {
+    border-color: white;
+    border-color: #dff0d8;
+    text-align: right;
+    word-wrap: break-word;
+}
+
+.otherstatement {
+    background-color: #E6E6E6;
+    border-color: #E6E6E6;
+    color: #666666;
+    text-align: left;
+    word-wrap: break-word;
+    /*border-color: gray;*/
+}
+
+center a[href="http://somee.com"] { display: none; }
+
+div[style="opacity: 0.9; z-index: 2147483647; position: fixed; left: 0px; bottom: 0px; height: 65px; right: 0px; display: block; width: 100%; background-color: #202020; margin: 0px; padding: 0px;"] { display: none !important; }
+
+div[style="position: fixed; z-index: 2147483647; left: 0px; bottom: 0px; height: 65px; right: 0px; display: block; width: 100%; background-color: transparent; margin: 0px; padding: 0px;"] { display: none !important; }
