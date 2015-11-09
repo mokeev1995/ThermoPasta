@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI.WebControls;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
@@ -158,7 +160,7 @@ namespace Portal.Controllers
                     await SignInManager.SignInAsync(user, false, false);
                     var userData = new UserData
                     {
-                        Id = User.Identity.GetUserId(),
+                        Id = user.Id,
                         FirstName = model.FirstName,
                         LastName = model.LastName
                     };
