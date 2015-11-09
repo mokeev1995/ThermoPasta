@@ -158,6 +158,7 @@ namespace Portal.Controllers
                     await SignInManager.SignInAsync(user, false, false);
                     var userData = new UserData
                     {
+                        Id = User.Identity.GetUserId(),
                         FirstName = model.FirstName,
                         LastName = model.LastName
                     };
