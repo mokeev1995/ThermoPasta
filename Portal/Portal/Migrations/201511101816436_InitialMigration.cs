@@ -61,6 +61,16 @@ namespace Portal.Migrations
                 .Index(t => t.UserId);
             
             CreateTable(
+                "dbo.CheckCodes",
+                c => new
+                    {
+                        Id = c.String(nullable: false, maxLength: 128),
+                        Code = c.String(nullable: false, maxLength: 4),
+                        Time = c.DateTime(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id);
+            
+            CreateTable(
                 "dbo.Devices",
                 c => new
                     {
@@ -96,7 +106,6 @@ namespace Portal.Migrations
                         Id = c.Int(nullable: false, identity: true),
                         Start = c.Int(nullable: false),
                         End = c.Int(nullable: false),
-                        Title = c.String(nullable: false, maxLength: 256),
                         Description = c.String(nullable: false, maxLength: 256),
                         ProfileId = c.Int(nullable: false),
                     })
@@ -152,6 +161,7 @@ namespace Portal.Migrations
             DropTable("dbo.Intervals");
             DropTable("dbo.Profiles");
             DropTable("dbo.Devices");
+            DropTable("dbo.CheckCodes");
             DropTable("dbo.AspNetUserLogins");
             DropTable("dbo.AspNetUserClaims");
             DropTable("dbo.AspNetUsers");

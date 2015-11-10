@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
 namespace Portal.Models.CodeFirstModels
 {
@@ -59,14 +57,22 @@ namespace Portal.Models.CodeFirstModels
         [Required]
         [StringLength(256)]
         [MinLength(2)]
-        public string Title { get; set; }
-
-        [Required]
-        [StringLength(256)]
-        [MinLength(2)]
         public string Description { get; set; }
 
         public int ProfileId { get; set; }
         public virtual Profile Profile { get; set; }
+    }
+
+    public class CheckCode
+    {
+        public string Id { get; set; }
+
+        [Required]
+        [StringLength(4)]
+        [MinLength(4)]
+        public string Code { get; set; }
+
+        [Required]
+        public DateTime Time { get; set; }
     }
 }

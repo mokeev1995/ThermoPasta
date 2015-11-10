@@ -1,4 +1,3 @@
-using System;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using Portal.Models.CodeFirstModels;
@@ -66,6 +65,85 @@ namespace Portal.Migrations
             context.SaveChanges();
 
             context.AspNetUsers.AddOrUpdate(Alex, Kirill);
+            context.SaveChanges();
+
+            var teapotProfile = new Profile
+            {
+                Title = "teapot#1",
+                Description = "some teapot description"
+            };
+            var poolProfile = new Profile
+            {
+                Title = "pool#1",
+                Description = "some pool description"
+            };
+            context.Profiles.AddOrUpdate(p => p.Title, teapotProfile, poolProfile);
+            context.SaveChanges();
+
+            var teapotIntervals = new[]
+            {
+                new Interval
+                {
+                    ProfileId = 1,
+                    Description = "cold",
+                    Start = 1,
+                    End = 25
+                },
+                new Interval
+                {
+                    ProfileId = 1,
+                    Description = "warm",
+                    Start = 26,
+                    End = 75
+                },
+                new Interval
+                {
+                    ProfileId = 1,
+                    Description = "hot",
+                    Start = 76,
+                    End = 100
+                }
+                };
+
+            var poolIntervals = new[]
+            {
+                new Interval
+                {
+                    ProfileId = 2,
+                    Description = "cool",
+                    Start = 1,
+                    End = 25
+                },
+                new Interval
+                {
+                    ProfileId = 2,
+                    Description = "let's swim!",
+                    Start = 26,
+                    End = 30
+                }
+                };
+
+            context.Intervals.AddOrUpdate(i => i.Description, teapotIntervals);
+            context.Intervals.AddOrUpdate(i => i.Description, poolIntervals);
+            context.SaveChanges();
+
+            var teapot = new Device
+            {
+                Id = "teapot's MAC",
+                CurrentTemparature = 53,
+                ProfileId = 1,
+                Title = "electric teapot in kitchen",
+                UserDataId = KirillData.Id
+            };
+            var pool = new Device
+            {
+                Id = "pool's MAC",
+                CurrentTemparature = 26,
+                ProfileId = 2,
+                Title = "pool in front of house",
+                UserDataId = KirillData.Id
+            };
+            context.Devices.AddOrUpdate(d => d.Id, teapot, pool);
             context.SaveChanges();
         }
     }

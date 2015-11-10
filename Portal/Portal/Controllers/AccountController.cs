@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Policy;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.UI.WebControls;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
@@ -136,9 +134,11 @@ namespace Portal.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
-            List<SelectListItem> choice = new List<SelectListItem>();
-            choice.Add(new SelectListItem { Text = "Join to already existing", Value = Boolean.TrueString, Selected = true });
-            choice.Add(new SelectListItem { Text = "Create new", Value = Boolean.FalseString, Selected = false });
+            List<SelectListItem> choice = new List<SelectListItem>
+            {
+                new SelectListItem {Text = "Join to already existing", Value = Boolean.TrueString, Selected = true},
+                new SelectListItem {Text = "Create new", Value = Boolean.FalseString, Selected = false}
+            };
 
             ViewBag.Choice = choice;
             return View();
@@ -166,12 +166,6 @@ namespace Portal.Controllers
                     };
                     _uow.UserDataRepository.Insert(userData);
                     _uow.Save();
-
-                    // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-                    // Send an email with this link
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
                     return RedirectToAction("Index", "Home");
                 }

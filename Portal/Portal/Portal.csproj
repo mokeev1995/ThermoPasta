@@ -199,6 +199,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\DeviceController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="DAL\GenericRepository.cs" />
@@ -208,9 +209,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201511091724474_InitialMigration.cs" />
-    <Compile Include="Migrations\201511091724474_InitialMigration.Designer.cs">
-      <DependentUpon>201511091724474_InitialMigration.cs</DependentUpon>
+    <Compile Include="Migrations\201511101816436_InitialMigration.cs" />
+    <Compile Include="Migrations\201511101816436_InitialMigration.Designer.cs">
+      <DependentUpon>201511101816436_InitialMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\CodeFirstModels\Common.cs" />
@@ -220,6 +221,7 @@
     <Compile Include="Models\Context\IdentityModels.cs" />
     <Compile Include="Models\ViewModels\Account.cs" />
     <Compile Include="Models\ViewModels\Manage.cs" />
+    <Compile Include="Models\ViewModels\Thermo.cs" />
     <Compile Include="Ninject\NinjectDependencyResolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -301,6 +303,7 @@
     <Content Include="Views\Shared\EditorTemplates\Enum.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\EnumToLabel.cshtml" />
     <Content Include="Views\Manage\ChangeUserData.cshtml" />
+    <Content Include="Views\Device\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -313,8 +316,8 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201511091724474_InitialMigration.resx">
-      <DependentUpon>201511091724474_InitialMigration.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201511101816436_InitialMigration.resx">
+      <DependentUpon>201511101816436_InitialMigration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

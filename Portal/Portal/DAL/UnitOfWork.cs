@@ -13,6 +13,7 @@ namespace Portal.DAL
         private IRepository<Device> _deviceRepository;
         private IRepository<Profile> _profileRepository;
         private IRepository<Interval> _intervalRepository;
+        private IRepository<CheckCode> _checkCodeRepository;
 
         public IRepository<AspNetUser> AspNetUserRepository
         {
@@ -71,6 +72,18 @@ namespace Portal.DAL
                     _intervalRepository = new GenericRepository<Interval>(_context);
                 }
                 return _intervalRepository;
+            }
+        }
+
+        public IRepository<CheckCode> CheckCodeRepository
+        {
+            get
+            {
+                if (_checkCodeRepository == null)
+                {
+                    _checkCodeRepository = new GenericRepository<CheckCode>(_context);
+                }
+                return _checkCodeRepository;
             }
         }
 

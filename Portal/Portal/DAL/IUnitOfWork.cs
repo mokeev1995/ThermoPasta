@@ -10,6 +10,7 @@ namespace Portal.DAL
         IRepository<Device> DeviceRepository { get; }
         IRepository<Profile> ProfileRepository { get; }
         IRepository<Interval> IntervalRepository { get; }
+        IRepository<CheckCode> CheckCodeRepository { get; }
 
         void Save();
     }
