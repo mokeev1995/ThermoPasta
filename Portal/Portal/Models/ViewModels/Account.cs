@@ -92,10 +92,6 @@ namespace Portal.Models.ViewModels
         [System.ComponentModel.DataAnnotations.Compare("Password",
             ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
-
-        [Required]
-        [Display(Name = "Group")]
-        public bool Join { get; set; }
     }
 
     public class ResetPasswordViewModel
