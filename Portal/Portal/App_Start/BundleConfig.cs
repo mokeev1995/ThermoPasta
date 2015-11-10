@@ -28,9 +28,9 @@ namespace Portal
             bundles.Add(new ScriptBundle("~/bundles/global").Include(
                 "~/Scripts/global.js"));
 
-            bundles.Add(new StyleBundle("~/CSS/css").Include(
-                "~/CSS/bootstrap.css",
-                "~/CSS/site.css"));
+            bundles.Add(new StyleBundle("~/Content/css").Include(
+                "~/Content/bootstrap.css",
+                "~/Content/site.css"));
         }
     }
 }
