@@ -13,6 +13,22 @@ namespace Portal.Models.ViewModels
         [Required]
         [Display(Name = "Current temparature")]
         public int CurrentTemparature { get; set; }
+
         public string Status { get; set; }
+    }
+
+    public class DeviceCreate
+    {
+        [Required]
+        [StringLength(256)]
+        [MinLength(2)]
+        public string Title { get; set; }
+
+        public int ProfileId { get; set; }
+
+        [Required]
+        [StringLength(4)]
+        [MinLength(4)]
+        public string Code { get; set; }
     }
 }

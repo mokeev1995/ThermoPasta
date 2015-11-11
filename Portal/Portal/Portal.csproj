@@ -304,6 +304,7 @@
     <Content Include="Views\Shared\EditorTemplates\EnumToLabel.cshtml" />
     <Content Include="Views\Manage\ChangeUserData.cshtml" />
     <Content Include="Views\Device\Index.cshtml" />
+    <Content Include="Views\Device\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

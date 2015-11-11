@@ -1,3 +1,4 @@
+using System;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using Portal.Models.CodeFirstModels;
@@ -77,7 +78,13 @@ namespace Portal.Migrations
                 Title = "pool#1",
                 Description = "some pool description"
             };
-            context.Profiles.AddOrUpdate(p => p.Title, teapotProfile, poolProfile);
+            var bathProfile = new Profile
+            {
+                Title = "bath#1",
+                Description = "some pool description",
+                UserDataId = KirillData.Id
+            };
+            context.Profiles.AddOrUpdate(p => p.Title, teapotProfile, poolProfile, bathProfile);
             context.SaveChanges();
 
             var teapotIntervals = new[]
@@ -123,8 +130,20 @@ namespace Portal.Migrations
                 }
                 };
 
+            var bathIntervals = new[]
+            {
+                new Interval
+                {
+                    ProfileId = 3,
+                    Description = "OK;)",
+                    Start = -100,
+                    End = 100
+                }
+            };
+
             context.Intervals.AddOrUpdate(i => i.Description, teapotIntervals);
             context.Intervals.AddOrUpdate(i => i.Description, poolIntervals);
+            context.Intervals.AddOrUpdate(i => i.Description, bathIntervals);
             context.SaveChanges();
 
             var teapot = new Device
@@ -144,6 +163,16 @@ namespace Portal.Migrations
                 UserDataId = KirillData.Id
             };
             context.Devices.AddOrUpdate(d => d.Id, teapot, pool);
+            context.SaveChanges();
+
+            var newCode = new CheckCode
+            {
+                Id = "mac123456",
+                Code = "1324",
+                Time = DateTime.Now.AddMinutes(-5)
+            };
+
+            context.CheckCodes.AddOrUpdate(d => d.Id, newCode);
             context.SaveChanges();
         }
     }
