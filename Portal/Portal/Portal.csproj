@@ -202,6 +202,7 @@
     <Compile Include="Controllers\DeviceController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="DAL\GenericRepository.cs" />
     <Compile Include="DAL\IRepository.cs" />
     <Compile Include="DAL\IUnitOfWork.cs" />
@@ -305,6 +306,7 @@
     <Content Include="Views\Manage\ChangeUserData.cshtml" />
     <Content Include="Views\Device\Index.cshtml" />
     <Content Include="Views\Device\Create.cshtml" />
+    <Content Include="Views\Profile\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
