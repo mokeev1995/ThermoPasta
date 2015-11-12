@@ -20,6 +20,8 @@ namespace Portal.Models.ViewModels
 
     public class DeviceCreate
     {
+        public string Id { get; set; }
+
         [Required]
         [StringLength(256)]
         [MinLength(2)]

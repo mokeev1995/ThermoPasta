@@ -32,5 +32,7 @@ namespace Portal.Models.Context
         public System.Data.Entity.DbSet<Portal.Models.ViewModels.IntervalView> IntervalViews { get; set; }
 
         public System.Data.Entity.DbSet<Portal.Models.ViewModels.ProfileView> ProfileViews { get; set; }
+
+        public System.Data.Entity.DbSet<Portal.Models.ViewModels.DeviceView> DeviceViews { get; set; }
     }
 }

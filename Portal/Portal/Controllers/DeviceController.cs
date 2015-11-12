@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Portal.DAL;
@@ -105,6 +106,111 @@ namespace Portal.Controllers
 
             return View(model);
         }
+
+        [HttpGet]
+        public ActionResult Edit(string id)
+        {
+            var userId = User.Identity.GetUserId();
+            var profiles = _uow.ProfileRepository.GetAll().Where(p => p.UserDataId == null || p.UserDataId == userId);
+            var profilesList = new SelectList(profiles, "Id", "Title");
+            ViewBag.Profiles = profilesList;
+
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var device = _uow.DeviceRepository.GetById(id);
+
+
+            if (device == null)
+            {
+                return HttpNotFound();
+            }
+
+            var deviceView = new DeviceCreate
+            {
+                Id = device.Id,
+                Title = device.Title,
+                ProfileId = device.ProfileId,
+                Code = "1234"
+
+            };
+            return View(deviceView);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(DeviceCreate model)
+        {
+            var userId = User.Identity.GetUserId();
+            var profiles = _uow.ProfileRepository.GetAll().Where(p => p.UserDataId == null || p.UserDataId == userId);
+            var profilesList = new SelectList(profiles, "Id", "Title");
+            ViewBag.Profiles = profilesList;
+
+            if (ModelState.IsValid)
+            {
+                var device = new Device
+                {
+                    Id = model.Id,
+                    ProfileId = model.ProfileId,
+                    Title = model.Title,
+                    UserDataId = userId
+                };
+
+                _uow.DeviceRepository.Update(device);
+                _uow.Save();
+
+                return RedirectToAction("Index");
+            }
+            return View(model);
+        }
+
+        public ActionResult Delete(string id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var device = _uow.DeviceRepository.GetById(id);
+            if (device == null)
+            {
+                return HttpNotFound();
+            }
+
+            var deviceView = new DeviceView
+            {
+                Id = device.Id,
+                Title = device.Title,
+                Profile = device.Profile.Title
+            };
+
+            return View(deviceView);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(string id)
+        {
+            _uow.DeviceRepository.Delete(id);
+            _uow.Save();
+            return RedirectToAction("Index");
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _uow.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+
+
+
+
 
         [HttpGet]
         public string GetCheckCode(string id)
