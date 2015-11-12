@@ -36,6 +36,7 @@ namespace Portal.Controllers
                         CurrentTemparature = device.CurrentTemparature,
                         Profile = device.Profile.Title,
                         Title = device.Title,
+                        Period = device.Period
                     };
 
                     if (!device.Profile.Intervals.Any(i => i.Start <= newDeviceView.CurrentTemparature && newDeviceView.CurrentTemparature <= i.End))
@@ -64,6 +65,13 @@ namespace Portal.Controllers
             var profiles = _uow.ProfileRepository.GetAll().Where(p => p.UserDataId == null || p.UserDataId == userId);
             var profilesList = new SelectList(profiles, "Id", "Title");
             ViewBag.Profiles = profilesList;
+
+            var periods = new int[60];
+            for (int i = 0; i < 60; i++)
+            {
+                periods[i] = i + 1;
+            }
+            ViewBag.Periods = new SelectList(periods);
 
             return View();
         }
@@ -115,6 +123,13 @@ namespace Portal.Controllers
             var profilesList = new SelectList(profiles, "Id", "Title");
             ViewBag.Profiles = profilesList;
 
+            var periods = new int[60];
+            for (int i = 0; i < 60; i++)
+            {
+                periods[i] = i + 1;
+            } 
+            ViewBag.Periods = new SelectList(periods);
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -128,12 +143,11 @@ namespace Portal.Controllers
                 return HttpNotFound();
             }
 
-            var deviceView = new DeviceCreate
+            var deviceView = new DeviceEdit
             {
                 Id = device.Id,
                 Title = device.Title,
-                ProfileId = device.ProfileId,
-                Code = "1234"
+                ProfileId = device.ProfileId
 
             };
             return View(deviceView);
@@ -141,7 +155,7 @@ namespace Portal.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(DeviceCreate model)
+        public ActionResult Edit(DeviceEdit model)
         {
             var userId = User.Identity.GetUserId();
             var profiles = _uow.ProfileRepository.GetAll().Where(p => p.UserDataId == null || p.UserDataId == userId);
@@ -150,13 +164,14 @@ namespace Portal.Controllers
 
             if (ModelState.IsValid)
             {
-                var device = new Device
+                var device = _uow.DeviceRepository.GetById(model.Id);
+                device.ProfileId = model.ProfileId;
+                device.Title = model.Title;
+
+                if (device.Period != model.Period)
                 {
-                    Id = model.Id,
-                    ProfileId = model.ProfileId,
-                    Title = model.Title,
-                    UserDataId = userId
-                };
+                    device.Period = model.Period;
+                }
 
                 _uow.DeviceRepository.Update(device);
                 _uow.Save();

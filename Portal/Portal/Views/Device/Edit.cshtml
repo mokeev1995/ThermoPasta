@@ -1,5 +1,4 @@
-﻿@model Portal.Models.ViewModels.DeviceCreate
-
+﻿@model Portal.Models.ViewModels.DeviceEdit
 @{
     ViewBag.Title = "Edit";
 }
@@ -14,7 +13,6 @@
     <div class="form-horizontal">
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.Id)
-        @Html.HiddenFor(model => model.Code)
         <div class="form-group">
             @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -24,9 +22,16 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.ProfileId, new { @class = "col-md-2 control-label" })
+            @Html.LabelFor(model => model.ProfileId, new {@class = "col-md-2 control-label"})
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.ProfileId, ViewBag.Profiles as SelectList, new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.ProfileId, ViewBag.Profiles as SelectList, new {@class = "form-control"})
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Period, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Period, ViewBag.Periods as SelectList, new { @class = "form-control" })
             </div>
         </div>
 

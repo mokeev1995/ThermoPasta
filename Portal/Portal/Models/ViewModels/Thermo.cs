@@ -16,6 +16,8 @@ namespace Portal.Models.ViewModels
         public int CurrentTemparature { get; set; }
 
         public string Status { get; set; }
+
+        public int Period { get; set; }
     }
 
     public class DeviceCreate
@@ -33,6 +35,22 @@ namespace Portal.Models.ViewModels
         [StringLength(4)]
         [MinLength(4)]
         public string Code { get; set; }
+
+        public int Period { get; set; }
+    }
+
+    public class DeviceEdit
+    {
+        public string Id { get; set; }
+
+        [Required]
+        [StringLength(256)]
+        [MinLength(2)]
+        public string Title { get; set; }
+
+        public int ProfileId { get; set; }
+
+        public int Period { get; set; }
     }
 
     public class ProfileView

@@ -79,6 +79,7 @@ namespace Portal.Migrations
                         UserDataId = c.String(maxLength: 128),
                         ProfileId = c.Int(nullable: false),
                         CurrentTemparature = c.Int(nullable: false),
+                        Period = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.UserDatas", t => t.UserDataId)

@@ -20,6 +20,8 @@ namespace Portal.Models.CodeFirstModels
         public virtual Profile Profile { get; set; }
 
         public int CurrentTemparature { get; set; }
+
+        public int Period { get; set; }
     }
 
     public class Profile

@@ -152,7 +152,8 @@ namespace Portal.Migrations
                 CurrentTemparature = 53,
                 ProfileId = 1,
                 Title = "electric teapot in kitchen",
-                UserDataId = KirillData.Id
+                UserDataId = KirillData.Id,
+                Period = 1
             };
             var pool = new Device
             {
@@ -160,20 +161,21 @@ namespace Portal.Migrations
                 CurrentTemparature = 26,
                 ProfileId = 2,
                 Title = "pool in front of house",
-                UserDataId = KirillData.Id
+                UserDataId = KirillData.Id,
+                Period = 30
             };
             context.Devices.AddOrUpdate(d => d.Id, teapot, pool);
             context.SaveChanges();
 
-            var newCode = new CheckCode
-            {
-                Id = "mac123456",
-                Code = "1324",
-                Time = DateTime.Now.AddMinutes(-5)
-            };
+            //var newCode = new CheckCode
+            //{
+            //    Id = "mac123456",
+            //    Code = "1324",
+            //    Time = DateTime.Now.AddMinutes(-5)
+            //};
 
-            context.CheckCodes.AddOrUpdate(d => d.Id, newCode);
-            context.SaveChanges();
+            //context.CheckCodes.AddOrUpdate(d => d.Id, newCode);
+            //context.SaveChanges();
         }
     }
 }
