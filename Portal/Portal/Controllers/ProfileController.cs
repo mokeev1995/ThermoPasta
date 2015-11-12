@@ -1,18 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using System.Net;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Ninject.Infrastructure.Language;
 using Portal.DAL;
+using Portal.Models.CodeFirstModels;
 using Portal.Models.ViewModels;
 
 namespace Portal.Controllers
 {
+    [Authorize]
     public class ProfileController : Controller
     {
         private readonly IUnitOfWork _uow;
+
         public ProfileController(IUnitOfWork uow)
         {
             _uow = uow;
@@ -22,7 +24,10 @@ namespace Portal.Controllers
         public ActionResult Index()
         {
             var userId = User.Identity.GetUserId();
-            var profiles = _uow.ProfileRepository.GetAll().Where(p => p.UserDataId == null || p.UserDataId == userId).ToEnumerable();
+            var profiles =
+                _uow.ProfileRepository.GetAll()
+                    .Where(p => p.UserDataId == null || p.UserDataId == userId)
+                    .ToEnumerable();
             var profilesList = new List<ProfileView>();
 
             foreach (var profile in profiles)
@@ -42,73 +47,146 @@ namespace Portal.Controllers
         // GET: Profile/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            var profile = _uow.ProfileRepository.GetAll().First(p => p.Id == id);
+
+            var intervalsList = new List<IntervalView>();
+            var intervals = profile.Intervals.OrderBy(i => i.Start);
+
+            foreach (var interval in intervals)
+            {
+                intervalsList.Add(
+                    new IntervalView
+                    {
+                        Description = interval.Description,
+                        Start = interval.Start,
+                        End = interval.End
+                    });
+            }
+            var profileView = new ProfileView
+            {
+                Id = profile.Id,
+                Title = profile.Title,
+                Description = profile.Description,
+                IsDefault = profile.UserDataId == null,
+                Intervals = intervalsList,
+                Type = profile.UserDataId == null ? "Default" : "Custom"
+            };
+
+            return View(profileView);
         }
 
-        // GET: Profile/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Profile/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Create(ProfileCreate profileCreate)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add insert logic here
+                var userId = User.Identity.GetUserId();
+                var profile = new Profile
+                {
+                    Description = profileCreate.Description,
+                    Title = profileCreate.Title,
+                    UserDataId = userId
+                };
+
+                _uow.ProfileRepository.Insert(profile);
+                _uow.Save();
 
                 return RedirectToAction("Index");
             }
-            catch
+
+            return View(profileCreate);
+        }
+
+        public ActionResult Edit(int? id)
+        {
+
+            if (id == null)
             {
-                return View();
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-        }
 
-        // GET: Profile/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
+            var profile = _uow.ProfileRepository.GetById(id);
 
-        // POST: Profile/Edit/5
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
+
+            if (profile == null)
             {
-                // TODO: Add update logic here
+                return HttpNotFound();
+            }
+
+            var profileView = new ProfileCreate
+            {
+                Id = profile.Id,
+                Title = profile.Title,
+                Description = profile.Description,
+            };
+            return View(profileView);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(ProfileCreate profileCreate)
+        {
+            if (ModelState.IsValid)
+            {
+                var userId = User.Identity.GetUserId();
+                var profile = new Profile
+                {
+                    Id = profileCreate.Id,
+                    Description = profileCreate.Description,
+                    Title = profileCreate.Title,
+                    UserDataId = userId
+                };
+
+                _uow.ProfileRepository.Update(profile);
+                _uow.Save();
 
                 return RedirectToAction("Index");
             }
-            catch
-            {
-                return View();
-            }
+            return View(profileCreate);
         }
 
-        // GET: Profile/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var profile = _uow.ProfileRepository.GetById(id);
+            if (profile == null)
+            {
+                return HttpNotFound();
+            }
+
+            var profileView = new ProfileView
+            {
+                Id = profile.Id,
+                Title = profile.Title,
+                Description = profile.Description,
+            };
+
+            return View(profileView);
+        }
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+           _uow.ProfileRepository.Delete(id);
+            return RedirectToAction("Index");
         }
 
-        // POST: Profile/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        protected override void Dispose(bool disposing)
         {
-            try
+            if (disposing)
             {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
+               _uow.Dispose();
             }
-            catch
-            {
-                return View();
-            }
+            base.Dispose(disposing);
         }
     }
 }

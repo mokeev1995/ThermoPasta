@@ -28,5 +28,9 @@ namespace Portal.Models.Context
         {
             return new ApplicationDbContext();
         }
+
+        public System.Data.Entity.DbSet<Portal.Models.ViewModels.IntervalView> IntervalViews { get; set; }
+
+        public System.Data.Entity.DbSet<Portal.Models.ViewModels.ProfileView> ProfileViews { get; set; }
     }
 }

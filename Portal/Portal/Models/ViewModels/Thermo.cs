@@ -33,7 +33,7 @@ namespace Portal.Models.ViewModels
         public string Code { get; set; }
     }
 
-        public class ProfileView
+    public class ProfileView
     {
         public int Id { get; set; }
 
@@ -42,10 +42,16 @@ namespace Portal.Models.ViewModels
         public string Description { get; set; }
 
         public bool IsDefault { get; set; }
+
+        public string Type { get; set; }
+
+        public List<IntervalView> Intervals { get; set; }
     }
 
     public class ProfileCreate
     {
+        public int Id { get; set; }
+
         [Required]
         [StringLength(256)]
         [MinLength(2)]
@@ -73,16 +79,17 @@ namespace Portal.Models.ViewModels
 
     public class IntervalCreate
     {
+        public int Id { get; set; }
+
+        public int Start { get; set; }
+
+        public int End { get; set; }
+
         [Required]
         [StringLength(256)]
         [MinLength(2)]
-        public string Title { get; set; }
+        public string Description { get; set; }
 
         public int ProfileId { get; set; }
-
-        [Required]
-        [StringLength(4)]
-        [MinLength(4)]
-        public string Code { get; set; }
     }
 }

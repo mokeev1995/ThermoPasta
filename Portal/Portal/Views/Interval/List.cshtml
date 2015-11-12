@@ -1,0 +1,43 @@
+﻿@model IEnumerable<Portal.Models.ViewModels.IntervalView>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <strong>Interval List</strong>
+    </div>
+
+    @if (Model.Count() > 0)
+    {
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Start)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.End)
+                </th>
+            </tr>
+
+            @foreach (var interval in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => interval.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => interval.Start)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => interval.End)
+                    </td>
+                </tr>
+            }
+        </table>
+    }
+    else
+    {
+        @: <div class="text-muted">&nbsp;No intervals found.</div>
+    }
+</div>

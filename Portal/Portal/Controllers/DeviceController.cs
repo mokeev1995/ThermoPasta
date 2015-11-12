@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using System.Xml.Schema;
 using Microsoft.AspNet.Identity;
 using Portal.DAL;
 using Portal.Models.CodeFirstModels;
@@ -10,6 +9,7 @@ using Portal.Models.ViewModels;
 
 namespace Portal.Controllers
 {
+    [Authorize]
     public class DeviceController : Controller
     {
         private readonly IUnitOfWork _uow;
@@ -81,7 +81,7 @@ namespace Portal.Controllers
 
                 if (checkCodes.Any())
                 {
-                    if(checkCodes.First().Time.AddMinutes(15) >= DateTime.Now)
+                    if (checkCodes.First().Time.AddMinutes(15) >= DateTime.Now)
                     {
                         var newDevice = new Device
                         {
@@ -94,7 +94,7 @@ namespace Portal.Controllers
                         _uow.CheckCodeRepository.Delete(newDevice.Id);
                         _uow.Save();
 
-                        return RedirectToAction("Index");    
+                        return RedirectToAction("Index");
                     }
 
                     ModelState.AddModelError("", "Time expired");

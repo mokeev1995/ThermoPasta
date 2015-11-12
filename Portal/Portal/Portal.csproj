@@ -201,6 +201,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\DeviceController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\IntervalController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="DAL\GenericRepository.cs" />
@@ -210,6 +211,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\Helper.cs" />
     <Compile Include="Migrations\201511101816436_InitialMigration.cs" />
     <Compile Include="Migrations\201511101816436_InitialMigration.Designer.cs">
       <DependentUpon>201511101816436_InitialMigration.cs</DependentUpon>
@@ -307,6 +309,16 @@
     <Content Include="Views\Device\Index.cshtml" />
     <Content Include="Views\Device\Create.cshtml" />
     <Content Include="Views\Profile\Index.cshtml" />
+    <Content Include="Views\Profile\Details.cshtml" />
+    <Content Include="Views\Shared\_IntervalsPartial.cshtml" />
+    <Content Include="Views\Interval\Create.cshtml" />
+    <Content Include="Views\Interval\Delete.cshtml" />
+    <Content Include="Views\Interval\Edit.cshtml" />
+    <Content Include="Views\Interval\Index.cshtml" />
+    <Content Include="Views\Interval\List.cshtml" />
+    <Content Include="Views\Profile\Create.cshtml" />
+    <Content Include="Views\Profile\Edit.cshtml" />
+    <Content Include="Views\Profile\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

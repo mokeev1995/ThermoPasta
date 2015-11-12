@@ -1,0 +1,31 @@
+﻿@model IEnumerable<Portal.Models.ViewModels.IntervalView>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Start)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.End)
+        </th>
+    </tr>
+
+    @foreach (var interval in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => interval.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => interval.Start)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => interval.End)
+            </td>
+        </tr>
+    }
+</table>
+
