@@ -200,7 +200,9 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\DeviceController.cs" />
+    <Compile Include="Controllers\GraphController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\InteractionController.cs" />
     <Compile Include="Controllers\IntervalController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
@@ -321,6 +323,7 @@
     <Content Include="Views\Profile\Delete.cshtml" />
     <Content Include="Views\Device\Edit.cshtml" />
     <Content Include="Views\Device\Delete.cshtml" />
+    <Content Include="Views\Graph\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
