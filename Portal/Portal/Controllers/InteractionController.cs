@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using Portal.DAL;
@@ -42,7 +43,7 @@ namespace Portal.Controllers
             return "Error.";
         }
 
-        [HttpPost]
+        [HttpGet]
         public int AddTemperature(string id, int value)
         {
             var devices = _uow.DeviceRepository.GetAll().Where(d => d.Id == id).ToList();
@@ -60,7 +61,8 @@ namespace Portal.Controllers
                 _uow.Save();
 
                 var period = devices[0].Period;
-
+              
+                Debug.Print(period.ToString());
                 return period;
             }
 

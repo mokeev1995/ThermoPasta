@@ -76,9 +76,12 @@ namespace Portal.Controllers
             {
                 periods[i] = i + 1;
             }
-            ViewBag.Periods = new SelectList(periods);
+            ViewBag.Periods = new SelectList(periods, 1);
 
-            return View();
+            return View(new DeviceCreate
+            {
+                Period = 1
+            });
         }
 
         [HttpPost]
@@ -131,13 +134,6 @@ namespace Portal.Controllers
             var profilesList = new SelectList(profiles, "Id", "Title");
             ViewBag.Profiles = profilesList;
 
-            var periods = new int[60];
-            for (int i = 0; i < 60; i++)
-            {
-                periods[i] = i + 1;
-            } 
-            ViewBag.Periods = new SelectList(periods);
-
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -145,20 +141,27 @@ namespace Portal.Controllers
 
             var device = _uow.DeviceRepository.GetById(id);
 
+            var periods = new int[60];
+            for (int i = 0; i < 60; i++)
+            {
+                periods[i] = i + 1;
+            }
+            ViewBag.Periods = new SelectList(periods, device.Period);
+
 
             if (device == null)
             {
                 return HttpNotFound();
             }
 
-            var deviceView = new DeviceEdit
+            var deviceEdit = new DeviceEdit
             {
                 Id = device.Id,
                 Title = device.Title,
                 ProfileId = device.ProfileId
 
             };
-            return View(deviceView);
+            return View(deviceEdit);
         }
 
         [HttpPost]
