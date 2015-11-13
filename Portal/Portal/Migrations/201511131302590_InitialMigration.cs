@@ -78,7 +78,6 @@ namespace Portal.Migrations
                         Title = c.String(nullable: false, maxLength: 256),
                         UserDataId = c.String(maxLength: 128),
                         ProfileId = c.Int(nullable: false),
-                        CurrentTemparature = c.Int(nullable: false),
                         Period = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
@@ -125,6 +124,19 @@ namespace Portal.Migrations
                 .PrimaryKey(t => t.Id);
             
             CreateTable(
+                "dbo.Temperatures",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        DeviceId = c.String(nullable: false, maxLength: 128),
+                        Value = c.Int(nullable: false),
+                        Time = c.DateTime(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Devices", t => t.DeviceId, cascadeDelete: true)
+                .Index(t => t.DeviceId);
+            
+            CreateTable(
                 "dbo.AspNetUserRoles",
                 c => new
                     {
@@ -141,6 +153,7 @@ namespace Portal.Migrations
         
         public override void Down()
         {
+            DropForeignKey("dbo.Temperatures", "DeviceId", "dbo.Devices");
             DropForeignKey("dbo.Devices", "ProfileId", "dbo.Profiles");
             DropForeignKey("dbo.Profiles", "UserDataId", "dbo.UserDatas");
             DropForeignKey("dbo.Devices", "UserDataId", "dbo.UserDatas");
@@ -151,6 +164,7 @@ namespace Portal.Migrations
             DropForeignKey("dbo.AspNetUserClaims", "UserId", "dbo.AspNetUsers");
             DropIndex("dbo.AspNetUserRoles", new[] { "UserId" });
             DropIndex("dbo.AspNetUserRoles", new[] { "RoleId" });
+            DropIndex("dbo.Temperatures", new[] { "DeviceId" });
             DropIndex("dbo.Intervals", new[] { "ProfileId" });
             DropIndex("dbo.Profiles", new[] { "UserDataId" });
             DropIndex("dbo.Devices", new[] { "ProfileId" });
@@ -158,6 +172,7 @@ namespace Portal.Migrations
             DropIndex("dbo.AspNetUserLogins", new[] { "UserId" });
             DropIndex("dbo.AspNetUserClaims", new[] { "UserId" });
             DropTable("dbo.AspNetUserRoles");
+            DropTable("dbo.Temperatures");
             DropTable("dbo.UserDatas");
             DropTable("dbo.Intervals");
             DropTable("dbo.Profiles");

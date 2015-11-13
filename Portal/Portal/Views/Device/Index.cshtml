@@ -18,7 +18,10 @@
             @Html.DisplayNameFor(model => model.Profile)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.CurrentTemparature)
+            @Html.DisplayNameFor(model => model.LastTemparature)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Time)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Status)
@@ -38,7 +41,10 @@
             @Html.DisplayFor(modelItem => item.Profile)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.CurrentTemparature)
+            @Html.DisplayFor(modelItem => item.LastTemparature)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Time)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Status)

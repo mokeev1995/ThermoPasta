@@ -14,6 +14,7 @@ namespace Portal.DAL
         private IRepository<Profile> _profileRepository;
         private IRepository<Interval> _intervalRepository;
         private IRepository<CheckCode> _checkCodeRepository;
+        private IRepository<Temperature> _temperatureRepository;
 
         public IRepository<AspNetUser> AspNetUserRepository
         {
@@ -109,6 +110,19 @@ namespace Portal.DAL
                 }
             }
             _disposed = true;
+        }
+
+
+        public IRepository<Temperature> TemperatureRepository
+        {
+            get
+            {
+                if (_temperatureRepository == null)
+                {
+                    _temperatureRepository = new GenericRepository<Temperature>(_context);
+                }
+                return _temperatureRepository;
+            }
         }
     }
 }

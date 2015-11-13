@@ -30,22 +30,27 @@ namespace Portal.Controllers
                 var devicesView = new List<DeviceView>();
                 foreach (var device in devices)
                 {
+                    var temperature = device.Temperatures.Any() ? device.Temperatures.Last().Value : 0;
+                    var time = device.Temperatures.Any()
+                        ? device.Temperatures.Last().Time.ToShortTimeString()
+                        : DateTime.Now.ToShortTimeString();
                     var newDeviceView = new DeviceView
                     {
                         Id = device.Id,
-                        CurrentTemparature = device.CurrentTemparature,
+                        LastTemparature = temperature,
+                        Time = time,
                         Profile = device.Profile.Title,
                         Title = device.Title,
                         Period = device.Period
                     };
 
-                    if (!device.Profile.Intervals.Any(i => i.Start <= newDeviceView.CurrentTemparature && newDeviceView.CurrentTemparature <= i.End))
+                    if (!device.Profile.Intervals.Any(i => i.Start <= newDeviceView.LastTemparature && newDeviceView.LastTemparature <= i.End))
                     {
                         newDeviceView.Status = "no";
                     }
                     else
                     {
-                        newDeviceView.Status = device.Profile.Intervals.First(i => i.Start <= newDeviceView.CurrentTemparature && newDeviceView.CurrentTemparature <= i.End).Description;
+                        newDeviceView.Status = device.Profile.Intervals.First(i => i.Start <= newDeviceView.LastTemparature && newDeviceView.LastTemparature <= i.End).Description;
                     }
 
                     devicesView.Add(newDeviceView);
@@ -71,9 +76,13 @@ namespace Portal.Controllers
             {
                 periods[i] = i + 1;
             }
-            ViewBag.Periods = new SelectList(periods);
+            ViewBag.Periods = periods;
+            ViewBag.Period = 1;
 
-            return View();
+            return View(new DeviceCreate
+            {
+                Period = 1
+            });
         }
 
         [HttpPost]
@@ -97,7 +106,8 @@ namespace Portal.Controllers
                             Title = model.Title,
                             ProfileId = model.ProfileId,
                             Id = _uow.CheckCodeRepository.GetAll().First(cc => cc.Code == model.Code).Id,
-                            UserDataId = userId
+                            UserDataId = userId,
+                            Period = model.Period
                         };
                         _uow.DeviceRepository.Insert(newDevice);
                         _uow.CheckCodeRepository.Delete(newDevice.Id);
@@ -106,10 +116,12 @@ namespace Portal.Controllers
                         return RedirectToAction("Index");
                     }
 
-                    ModelState.AddModelError("", "Time expired");
+                    ModelState.AddModelError("", "Time expired. Please, press button on device again.");
+                    _uow.CheckCodeRepository.Delete(model.Code);
+                    _uow.Save();
                 }
 
-                ModelState.AddModelError("", "Code is encorrect");
+                ModelState.AddModelError("", "Code is encorrect.");
             }
 
             return View(model);
@@ -123,13 +135,6 @@ namespace Portal.Controllers
             var profilesList = new SelectList(profiles, "Id", "Title");
             ViewBag.Profiles = profilesList;
 
-            var periods = new int[60];
-            for (int i = 0; i < 60; i++)
-            {
-                periods[i] = i + 1;
-            } 
-            ViewBag.Periods = new SelectList(periods);
-
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -137,20 +142,29 @@ namespace Portal.Controllers
 
             var device = _uow.DeviceRepository.GetById(id);
 
+            var periods = new int[60];
+            for (int i = 0; i < 60; i++)
+            {
+                periods[i] = i + 1;
+            }
+            //ViewBag.Periods = new SelectList(periods, device.Period);
+            ViewBag.Periods = periods;
+            ViewBag.Period = device.Period;
+
 
             if (device == null)
             {
                 return HttpNotFound();
             }
 
-            var deviceView = new DeviceEdit
+            var deviceEdit = new DeviceEdit
             {
                 Id = device.Id,
                 Title = device.Title,
                 ProfileId = device.ProfileId
 
             };
-            return View(deviceView);
+            return View(deviceEdit);
         }
 
         [HttpPost]

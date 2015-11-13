@@ -149,7 +149,6 @@ namespace Portal.Migrations
             var teapot = new Device
             {
                 Id = "teapot's MAC",
-                CurrentTemparature = 53,
                 ProfileId = 1,
                 Title = "electric teapot in kitchen",
                 UserDataId = KirillData.Id,
@@ -158,7 +157,6 @@ namespace Portal.Migrations
             var pool = new Device
             {
                 Id = "pool's MAC",
-                CurrentTemparature = 26,
                 ProfileId = 2,
                 Title = "pool in front of house",
                 UserDataId = KirillData.Id,
@@ -167,6 +165,20 @@ namespace Portal.Migrations
             context.Devices.AddOrUpdate(d => d.Id, teapot, pool);
             context.SaveChanges();
 
+            context.Temperatures.AddOrUpdate(t=>t.Time,
+                new Temperature
+                {
+                    DeviceId = teapot.Id,
+                    Value = 53,
+                    Time = DateTime.Now.AddMinutes(-2)
+                },
+                new Temperature
+                {
+                    DeviceId = pool.Id,
+                    Value = 27,
+                    Time = DateTime.Now.AddMinutes(-1) 
+                });
+            context.SaveChanges();
             //var newCode = new CheckCode
             //{
             //    Id = "mac123456",
