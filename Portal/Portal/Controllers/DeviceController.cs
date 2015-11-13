@@ -76,7 +76,8 @@ namespace Portal.Controllers
             {
                 periods[i] = i + 1;
             }
-            ViewBag.Periods = new SelectList(periods, 1);
+            ViewBag.Periods = periods;
+            ViewBag.Period = 1;
 
             return View(new DeviceCreate
             {
@@ -146,7 +147,9 @@ namespace Portal.Controllers
             {
                 periods[i] = i + 1;
             }
-            ViewBag.Periods = new SelectList(periods, device.Period);
+            //ViewBag.Periods = new SelectList(periods, device.Period);
+            ViewBag.Periods = periods;
+            ViewBag.Period = device.Period;
 
 
             if (device == null)
