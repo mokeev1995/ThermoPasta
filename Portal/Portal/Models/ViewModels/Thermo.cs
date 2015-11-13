@@ -12,8 +12,10 @@ namespace Portal.Models.ViewModels
         public string Profile { get; set; }
 
         [Required]
-        [Display(Name = "Current temparature")]
-        public int CurrentTemparature { get; set; }
+        [Display(Name = "Last temparature")]
+        public int LastTemparature { get; set; }
+
+        public string Time { get; set; }
 
         public string Status { get; set; }
 

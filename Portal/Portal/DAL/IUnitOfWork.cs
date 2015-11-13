@@ -11,6 +11,7 @@ namespace Portal.DAL
         IRepository<Profile> ProfileRepository { get; }
         IRepository<Interval> IntervalRepository { get; }
         IRepository<CheckCode> CheckCodeRepository { get; }
+        IRepository<Temperature> TemperatureRepository { get; }
 
         void Save();
     }

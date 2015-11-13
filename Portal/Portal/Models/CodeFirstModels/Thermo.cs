@@ -6,6 +6,11 @@ namespace Portal.Models.CodeFirstModels
 {
     public class Device
     {
+        public Device()
+        {
+            Temperatures=new HashSet<Temperature>();
+        }
+
         public string Id { get; set; }
 
         [Required]
@@ -19,9 +24,9 @@ namespace Portal.Models.CodeFirstModels
         public int ProfileId { get; set; }
         public virtual Profile Profile { get; set; }
 
-        public int CurrentTemparature { get; set; }
-
         public int Period { get; set; }
+
+        public virtual ICollection<Temperature> Temperatures { get; set; }
     }
 
     public class Profile
@@ -63,6 +68,20 @@ namespace Portal.Models.CodeFirstModels
 
         public int ProfileId { get; set; }
         public virtual Profile Profile { get; set; }
+    }
+
+    public class Temperature
+    {
+        public int Id { get; set; }
+
+        [Required]
+        public string DeviceId { get; set; }
+        public virtual Device Device { get; set; }
+               
+        [Required]
+        public int Value { get; set; }
+
+        public DateTime Time { get; set; }
     }
 
     public class CheckCode

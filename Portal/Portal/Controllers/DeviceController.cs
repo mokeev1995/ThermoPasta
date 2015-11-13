@@ -30,22 +30,27 @@ namespace Portal.Controllers
                 var devicesView = new List<DeviceView>();
                 foreach (var device in devices)
                 {
+                    var temperature = device.Temperatures.Any() ? device.Temperatures.Last().Value : 0;
+                    var time = device.Temperatures.Any()
+                        ? device.Temperatures.Last().Time.ToShortTimeString()
+                        : DateTime.Now.ToShortTimeString();
                     var newDeviceView = new DeviceView
                     {
                         Id = device.Id,
-                        CurrentTemparature = device.CurrentTemparature,
+                        LastTemparature = temperature,
+                        Time = time,
                         Profile = device.Profile.Title,
                         Title = device.Title,
                         Period = device.Period
                     };
 
-                    if (!device.Profile.Intervals.Any(i => i.Start <= newDeviceView.CurrentTemparature && newDeviceView.CurrentTemparature <= i.End))
+                    if (!device.Profile.Intervals.Any(i => i.Start <= newDeviceView.LastTemparature && newDeviceView.LastTemparature <= i.End))
                     {
                         newDeviceView.Status = "no";
                     }
                     else
                     {
-                        newDeviceView.Status = device.Profile.Intervals.First(i => i.Start <= newDeviceView.CurrentTemparature && newDeviceView.CurrentTemparature <= i.End).Description;
+                        newDeviceView.Status = device.Profile.Intervals.First(i => i.Start <= newDeviceView.LastTemparature && newDeviceView.LastTemparature <= i.End).Description;
                     }
 
                     devicesView.Add(newDeviceView);
@@ -97,7 +102,8 @@ namespace Portal.Controllers
                             Title = model.Title,
                             ProfileId = model.ProfileId,
                             Id = _uow.CheckCodeRepository.GetAll().First(cc => cc.Code == model.Code).Id,
-                            UserDataId = userId
+                            UserDataId = userId,
+                            Period = model.Period
                         };
                         _uow.DeviceRepository.Insert(newDevice);
                         _uow.CheckCodeRepository.Delete(newDevice.Id);
@@ -106,10 +112,12 @@ namespace Portal.Controllers
                         return RedirectToAction("Index");
                     }
 
-                    ModelState.AddModelError("", "Time expired");
+                    ModelState.AddModelError("", "Time expired. Please, press button on device again.");
+                    _uow.CheckCodeRepository.Delete(model.Code);
+                    _uow.Save();
                 }
 
-                ModelState.AddModelError("", "Code is encorrect");
+                ModelState.AddModelError("", "Code is encorrect.");
             }
 
             return View(model);

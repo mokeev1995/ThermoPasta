@@ -6,10 +6,10 @@ using Portal.Models.CodeFirstModels;
 
 namespace Portal.Controllers
 {
-    [Authorize]
     public class InteractionController : Controller
     {
         private readonly IUnitOfWork _uow;
+
         public InteractionController(IUnitOfWork uow)
         {
             _uow = uow;
@@ -39,7 +39,32 @@ namespace Portal.Controllers
                 return newCode;
             }
 
-            return "error";
+            return "Error.";
+        }
+
+        [HttpPost]
+        public int AddTemperature(string id, int value)
+        {
+            var devices = _uow.DeviceRepository.GetAll().Where(d => d.Id == id).ToList();
+
+            if (devices.Count > 0)
+            {
+                var newTemperature = new Temperature
+                {
+                    DeviceId = id,
+                    Time = DateTime.Now,
+                    Value = value
+                };
+
+                _uow.TemperatureRepository.Insert(newTemperature);
+                _uow.Save();
+
+                var period = devices[0].Period;
+
+                return period;
+            }
+
+            return 1;
         }
     }
 }
