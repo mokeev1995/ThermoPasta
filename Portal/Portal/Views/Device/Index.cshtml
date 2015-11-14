@@ -5,7 +5,9 @@
 <h2>Devices</h2>
 
 <p>
-    @Html.ActionLink("Add new", "Create")
+	<a href="@Url.Action("Create", "Device")" class="btn btn-warning btn-fab btn-raised mdi-content-add addButton"></a>
+	@*
+	@Html.ActionLink("", "Create", new { controller = "Device"}, new { @class = "btn btn-warning btn-fab btn-raised mdi-action-grade" })*@
 </p>
 
 <div class="row">

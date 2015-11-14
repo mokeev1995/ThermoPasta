@@ -7,11 +7,11 @@ using Portal.Models.CodeFirstModels;
 
 namespace Portal.Controllers
 {
-    public class InteractionController : Controller
-    {
+    public class InteractionController : BaseController
+	{
         private readonly IUnitOfWork _uow;
 
-        public InteractionController(IUnitOfWork uow)
+        public InteractionController(IUnitOfWork uow):base(uow)
         {
             _uow = uow;
         }
