@@ -1,6 +1,6 @@
 ﻿body {
     padding-bottom: 20px;
-    padding-top: 60px;
+    padding-top: 80px;
 }
 
 button[class="navbar-toggle"],
@@ -170,4 +170,8 @@ header .navbar .navbar-nav>.active>a:focus{
 
 html, body {
 	background-color: #FAFAFA;
+}
+
+input, select, textarea {
+	max-width: none;
 }

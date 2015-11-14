@@ -2,16 +2,17 @@
     ViewBag.Title = "Devices";
 }
 
-<h2>Devices</h2>
-
 <p>
 	<a href="@Url.Action("Create", "Device")" class="btn btn-warning btn-fab btn-raised btn-material-deep-orange-500 mdi-content-add addButton"></a>
 </p>
 
-<div class="row">
-    <div id="replacetarget">
-        @{ Html.RenderAction("List", "Device"); }
-    </div>
+<div class="panel panel-default">
+	<div class="panel-heading"><h2>Devices</h2></div>
+	<div class="panel-body">
+		<div id="replacetarget">
+			@{ Html.RenderAction("List", "Device"); }
+		</div>
+	</div>
 </div>
 
 <script type="text/javascript">

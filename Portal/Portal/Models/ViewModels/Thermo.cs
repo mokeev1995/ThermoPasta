@@ -30,15 +30,19 @@ namespace Portal.Models.ViewModels
         [Required]
         [StringLength(256)]
         [MinLength(2)]
+		[Display(Name = "Device name")]
         public string Title { get; set; }
 
+		[Display(Name = "Profile Id")]
         public int ProfileId { get; set; }
 
         [Required]
         [StringLength(4)]
         [MinLength(4)]
+		[Display(Name = "Device code")]
         public string Code { get; set; }
 
+		[Display(Name = "Update period")]
         public int Period { get; set; }
     }
 
