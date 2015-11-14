@@ -4,10 +4,10 @@ using Portal.DAL;
 namespace Portal.Controllers
 {
     [Authorize]
-    public class GraphController : Controller
-    {
+    public class GraphController : BaseController
+	{
         private readonly IUnitOfWork _uow;
-        public GraphController(IUnitOfWork uow)
+        public GraphController(IUnitOfWork uow) : base(uow)
         {
             _uow = uow;
         }

@@ -9,10 +9,10 @@ using Portal.Models.ViewModels;
 
 namespace Portal.Controllers
 {
-    public class IntervalController : Controller
-    {
+    public class IntervalController : BaseController
+	{
         private readonly IUnitOfWork _uow;
-        public IntervalController(IUnitOfWork uow)
+        public IntervalController(IUnitOfWork uow):base(uow)
         {
             _uow = uow;
         }

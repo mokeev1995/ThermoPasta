@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using System.Security.Principal;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
 using System.Web.Routing;
+using Microsoft.AspNet.Identity;
+using Portal.DAL;
 
 namespace Portal.Helpers
 {
@@ -75,5 +75,17 @@ namespace Portal.Helpers
 
             return MvcHtmlString.Create(builder.ToString());
         }
+
+	    public static void SetUsername(IPrincipal user, IUnitOfWork uow, dynamic viewBag)
+	    {
+		    if (user != null && user.Identity.IsAuthenticated)
+		    {
+			    var userId = user.Identity.GetUserId();
+			    var userData = uow.UserDataRepository.GetById(userId);
+				if(userData != null)
+					viewBag.UserName = userData.FirstName + " " + userData.LastName;
+		    }
+	    }
     }
+
 }

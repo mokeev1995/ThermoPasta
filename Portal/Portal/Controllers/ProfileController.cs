@@ -11,11 +11,11 @@ using Portal.Models.ViewModels;
 namespace Portal.Controllers
 {
     [Authorize]
-    public class ProfileController : Controller
-    {
+    public class ProfileController : BaseController
+	{
         private readonly IUnitOfWork _uow;
 
-        public ProfileController(IUnitOfWork uow)
+        public ProfileController(IUnitOfWork uow) :base(uow)
         {
             _uow = uow;
         }

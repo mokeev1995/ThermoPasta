@@ -11,10 +11,10 @@ using Portal.Models.ViewModels;
 namespace Portal.Controllers
 {
     [Authorize]
-    public class DeviceController : Controller
-    {
+    public class DeviceController : BaseController
+	{
         private readonly IUnitOfWork _uow;
-        public DeviceController(IUnitOfWork uow)
+        public DeviceController(IUnitOfWork uow): base(uow)
         {
             _uow = uow;
         }

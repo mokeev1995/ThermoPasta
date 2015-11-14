@@ -140,3 +140,17 @@ center a[href="http://somee.com"] { display: none; }
 div[style="opacity: 0.9; z-index: 2147483647; position: fixed; left: 0px; bottom: 0px; height: 65px; right: 0px; display: block; width: 100%; background-color: #202020; margin: 0px; padding: 0px;"] { display: none !important; }
 
 div[style="position: fixed; z-index: 2147483647; left: 0px; bottom: 0px; height: 65px; right: 0px; display: block; width: 100%; background-color: transparent; margin: 0px; padding: 0px;"] { display: none !important; }
+
+
+
+.addButton {
+	position: fixed !important;
+	bottom: 30px;
+	right: 30px;
+}
+
+
+.menu-icon {
+	font-size: 15px !important;
+	color: white!important;
+}

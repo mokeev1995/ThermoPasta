@@ -1,54 +1,71 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimal-ui, minimum-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>@ViewBag.Title</title>
-    @Styles.Render("~/Content/css")
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimal-ui, minimum-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+	<title>@ViewBag.Title</title>
+	@Styles.Render("~/Content/css")
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/ajax")
+	<link href="~/Content/ripples.min.css" rel="stylesheet" />
+	<link href="~/Content/material-fullpalette.min.css" rel="stylesheet" />
+	<link href="~/Content/roboto.min.css" rel="stylesheet" />
+	<link href="~/Content/font-awesome.min.css" rel="stylesheet" />
 
-    @Scripts.Render("~/bundles/modernizr")
-    @Scripts.Render("~/bundles/global")
+	@Scripts.Render("~/bundles/jquery")
+	@Scripts.Render("~/bundles/ajax")
+
+	@Scripts.Render("~/bundles/modernizr")
+	@Scripts.Render("~/bundles/global")
 
 </head>
 <body style="background-color: transparent">
-<div class="navbar navbar-default navbar-fixed-top">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
-            </button>
-            <div class="btn-group navbar-brand">
-                <button type="button" class="btn btn-default navbar-btn" id="backLink">
-                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                    &nbsp;Back
-                </button>
-            </div>
 
-            @*@Html.ActionLink("Portal", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })*@
+	<div class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-inverse-collapse">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				@Html.ActionLink("Thermo", "Index", new { controller = "Home" }, new { @class = "navbar-brand" })
+			</div>
+			<div class="navbar-collapse collapse navbar-inverse-collapse">
+				@Html.Partial("_LoginPartial")
+				<ul class="nav navbar-nav navbar-right">
+					<li class="DevicesPage">
+						<a href="@Url.Action("Index", "Device")"><i class="mdi-device-devices menu-icon"></i> Devices</a>
+					</li>
+					<li class="GrapghsPage">
+						<a href="@Url.Action("Index", "Graph")"><i class="mdi-action-trending-up menu-icon"></i> Graphs</a>
+					</li>
+					<li class="ProfilesPage">
+						<a href="@Url.Action("Index", "Profile")"><i class="mdi-device-now-widgets menu-icon"></i> Profiles</a>
+					</li>
+				</ul>
+			</div>
+		</div> <!-- container end -->
+	</div> <!-- Navbar end -->
 
-        </div>
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                <li>@Html.ActionLink("Devices", "Index", "Device")</li>
-                <li>@Html.ActionLink("Graphs", "Index", "Graph")</li>
-                <li>@Html.ActionLink("Profiles", "Index", "Profile")</li>
-            </ul>
-            @Html.Partial("_LoginPartial")
-        </div>
-    </div>
-</div>
 <div class="container body-content">
-    @RenderBody()
-    @*<hr />
-            <footer>
-                <p>&copy; @DateTime.Now.ToLongDateString() - Portal for CS</p>
-            </footer>*@
+	@RenderBody()
+	@*<hr />
+			<footer>
+				<p>&copy; @DateTime.Now.ToLongDateString() - Portal for CS</p>
+			</footer>*@
 </div>
 @Scripts.Render("~/bundles/bootstrap")
+
+<script src="~/Scripts/ripples.min.js"></script>
+<script src="~/Scripts/material.min.js"></script>
+<script>
+	$(document).ready(function() {
+		$.material.init();
+		var currentLocation = location.href.replace(location.origin, "").split("/")[1];
+		
+	});
+</script>
+
 @RenderSection("scripts", false)
 </body>
 </html>
