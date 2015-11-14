@@ -5,3 +5,49 @@
 
 <h2>Index</h2>
 
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+    google.load("visualization", "1", { packages: ["corechart"] });
+    google.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        var jsonData = $.ajax({
+            url: "@Url.Action("GetTemperatures")",
+            dataType: "json",
+            contentType: "application/json",
+            async: false
+        }).responseJSON;
+
+        var data = [];
+        for (var i = 0; i < jsonData.length; ++i) {
+            data[i] = google.visualization.arrayToDataTable(jsonData[i].value);
+        }
+
+        var options = {
+            title: 'Температура в градусах цельсия',
+            isStacked: false,
+            width: 1000,
+            height: 400,
+            backgroundColor: {
+                stroke: 'black',
+                strokeWidth: 1,
+            },
+            colors: ['red', 'grey'], //colors:['red','#004411']. // Здесь цвета для каждого графика в любом формате
+            hAxis: { title: 'Время', titleTextStyle: { color: '#333' } },
+            vAxis: { minValue: 0 }
+        };
+
+        for (var i = 0; i < jsonData.length; ++i) {
+            $('#chart_label' + i).text(jsonData[i].name);
+            var chart = new google.visualization.AreaChart(document.getElementById('chart_div' + i));
+            chart.draw(data[i], options);
+        }
+    }
+</script>
+
+
+@for (var i = 0; i < 3; i++)
+{
+    <div id=@string.Format("chart_label{0}", i) class="row"></div>
+    <div id=@string.Format("chart_div{0}",i) style="width: 1000px; height: 400px;" class="row"></div>
+}
