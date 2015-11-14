@@ -44,7 +44,7 @@ namespace Portal.Controllers
                     return newCode;
                 }
 
-                return "Already added.";
+                return _uow.CheckCodeRepository.GetById(id).Code;
             }
 
             return "Error.";
