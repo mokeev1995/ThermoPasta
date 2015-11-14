@@ -1,6 +1,6 @@
 ﻿body {
     padding-bottom: 20px;
-    padding-top: 50px;
+    padding-top: 60px;
 }
 
 button[class="navbar-toggle"],
@@ -145,12 +145,29 @@ div[style="position: fixed; z-index: 2147483647; left: 0px; bottom: 0px; height:
 
 .addButton {
 	position: fixed !important;
-	bottom: 30px;
-	right: 30px;
+	top: 40px;
+	right: calc(50% - 28px);
+	z-index: 2000;
 }
 
 
 .menu-icon {
 	font-size: 15px !important;
 	color: white!important;
+}
+
+.topLine {
+	display: block;
+	height: 10px;
+	background-color: #303F9F;
+}
+
+header .navbar .navbar-nav>.active>a, 
+header .navbar .navbar-nav>.active>a:hover, 
+header .navbar .navbar-nav>.active>a:focus{
+	background-color: #303F9F;
+}
+
+html, body {
+	background-color: #FAFAFA;
 }
