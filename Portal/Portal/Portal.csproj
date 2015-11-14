@@ -215,10 +215,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\Helper.cs" />
-    <Compile Include="Migrations\201511131302590_InitialMigration.cs" />
-    <Compile Include="Migrations\201511131302590_InitialMigration.Designer.cs">
-      <DependentUpon>201511131302590_InitialMigration.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\CodeFirstModels\Common.cs" />
     <Compile Include="Models\CodeFirstModels\Other.cs" />
@@ -270,8 +266,7 @@
     <Content Include="fonts\RobotoDraftMedium.woff2" />
     <Content Include="fonts\RobotoDraftRegular.woff" />
     <None Include="Properties\PublishProfiles\ThermoPasta.pubxml" />
-      <Content Include="fonts\RobotoDraftRegular.woff2" />
-
+    <Content Include="fonts\RobotoDraftRegular.woff2" />
     <Content Include="Content\material-fullpalette.css.map" />
     <Content Include="Content\material-fullpalette.min.css.map" />
     <Content Include="Content\material.css.map" />
@@ -378,11 +373,6 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201511131302590_InitialMigration.resx">
-      <DependentUpon>201511131302590_InitialMigration.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
