@@ -19,6 +19,17 @@ namespace Portal.Controllers
 
         public ActionResult Index()
         {
+	        if (User.Identity.IsAuthenticated)
+	        {
+				var userId = User.Identity.GetUserId();
+				var userData = _uow.UserDataRepository.GetById(userId);
+				var userDevices = userData.UserDevices;
+
+				var deviceCount = userDevices.Count;
+
+		        ViewBag.DevicesCount = deviceCount;
+	        }
+
             return View();
         }
 

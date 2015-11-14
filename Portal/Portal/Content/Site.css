@@ -175,3 +175,12 @@ html, body {
 input, select, textarea {
 	max-width: none;
 }
+
+.graphImage {
+	overflow: hidden;
+	text-align: center;
+}
+
+.graphImage div div {
+	margin: 0 auto;
+}

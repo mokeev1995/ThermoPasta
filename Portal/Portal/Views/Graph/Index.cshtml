@@ -3,7 +3,7 @@
     ViewBag.Title = "Graphs";
 }
 
-<h2>Graphs for your devices</h2>
+<h1 style="padding-bottom: 20px;">Graphs for your devices</h1>
 
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type="text/javascript">
@@ -33,12 +33,13 @@
            
         }).done(function (jsonData) {
             var data = [];
-            for (var i = 0; i < jsonData.length; ++i) {
+	        var i;
+	        for (i = 0; i < jsonData.length; ++i) {
                 data[i] = google.visualization.arrayToDataTable(jsonData[i].value);
             }
 
-            for (var i = 0; i < jsonData.length; ++i) {
-                $('#chart_label' + i).text(jsonData[i].name);
+            for (i = 0; i < jsonData.length; ++i) {
+                $('#chart_label' + i).text("Graph for: " + jsonData[i].name);
                 var chart = new google.visualization.AreaChart(document.getElementById('chart_div' + i));
                 chart.draw(data[i], options);
             }
@@ -49,8 +50,14 @@
 </script>
 
 
-@for (var i = 0; i < 1; i++)
+@for (var i = 0; i < ViewBag.DevicesCount; i++)
 {
-    <div id=@string.Format("chart_label{0}", i) class="row"></div>
-    <div id=@string.Format("chart_div{0}",i) style="width: 1000px; height: 400px;" class="row"></div>
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 id="@string.Format("chart_label{0}", i)"></h3>
+		</div>
+		<div class="panel-body">
+			<div class="graphImage" id="@string.Format("chart_div{0}",i)"></div>
+		</div>
+	</div>
 }

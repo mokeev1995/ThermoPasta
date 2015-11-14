@@ -8,7 +8,7 @@ namespace Portal.Models.CodeFirstModels
     {
         public Device()
         {
-            Temperatures=new HashSet<Temperature>();
+	        Temperatures = new HashSet<Temperature>();
         }
 
         public string Id { get; set; }
@@ -22,7 +22,7 @@ namespace Portal.Models.CodeFirstModels
     {
         public Profile()
         {
-            Intervals=new HashSet<Interval>();
+	        Intervals = new HashSet<Interval>();
         }
         public int Id { get; set; }
 

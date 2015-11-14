@@ -82,6 +82,7 @@ namespace Portal.Models.ViewModels
         [Required]
         [StringLength(256)]
         [MinLength(2)]
+		[Display(Name = "Profile Name")]
         public string Title { get; set; }
 
         [Required]
