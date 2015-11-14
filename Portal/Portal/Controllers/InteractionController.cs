@@ -78,25 +78,6 @@ namespace Portal.Controllers
             _uow.TemperatureRepository.Insert(newTemperature);
             _uow.Save();
         }
-
-
-        [HttpGet]
-        [Authorize]
-        public JsonResult GetTemperatures()
-        {
-            var userId = User.Identity.GetUserId();
-            var userData = _uow.UserDataRepository.GetById(userId);
-            var userDevices = userData.UserDevices;
-            var deviceTemperatures = new List<object>();
-            foreach (var userDevice in userDevices)
-            {
-                var title = userDevice.Title;
-                var temperatures = userDevice.Device.Temperatures.Skip(Math.Max(0, userDevice.Device.Temperatures.Count() - 10)).Select(t => new { time = t.Time.ToShortTimeString(), value = t.Value }).ToArray();
-                deviceTemperatures.Add(new { name = title, temperatures = temperatures });
-
-            }
-
-            return Json(deviceTemperatures, JsonRequestBehavior.AllowGet);
-        }
     }
 }
+
