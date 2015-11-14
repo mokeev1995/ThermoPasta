@@ -27,45 +27,55 @@ namespace Portal.Controllers
 
             if (userData != null)
             {
-                var deviceViewList = new List<DeviceView>();
-
-                var userDevices = userData.UserDevices;
-                foreach (var userDevice in userDevices)
-                {
-                    var device = userDevice.Device;
-
-                    var temperature = device.Temperatures.Any() ? device.Temperatures.Last().Value : 0;
-                    var time = device.Temperatures.Any()
-                        ? device.Temperatures.Last().Time.ToShortTimeString()
-                        : DateTime.Now.ToShortTimeString();
-                    var newDeviceView = new DeviceView
-                    {
-                        Id = device.Id,
-                        LastTemparature = temperature,
-                        Time = time,
-                        Profile = userDevice.Profile.Title,
-                        Title = userDevice.Title,
-                        Period = userDevice.Period
-                    };
-
-                    if (!userDevice.Profile.Intervals.Any(i => i.Start <= newDeviceView.LastTemparature && newDeviceView.LastTemparature <= i.End))
-                    {
-                        newDeviceView.Status = "no";
-                    }
-                    else
-                    {
-                        newDeviceView.Status = userDevice.Profile.Intervals.First(i => i.Start <= newDeviceView.LastTemparature && newDeviceView.LastTemparature <= i.End).Description;
-                    }
-
-                    deviceViewList.Add(newDeviceView);
-                }
-
-                return View(deviceViewList);
+                return View();
             }
             else
             {
                 return RedirectToAction("ChangeUserData", "Manage");
             }
+        }
+
+
+        public ActionResult List()
+        {
+            var userId = User.Identity.GetUserId();
+            var userData = _uow.UserDataRepository.GetById(userId);
+
+            var deviceViewList = new List<DeviceView>();
+
+            var userDevices = userData.UserDevices;
+            foreach (var userDevice in userDevices)
+            {
+                var device = userDevice.Device;
+
+                var temperature = device.Temperatures.Any() ? device.Temperatures.Last().Value : 0;
+                var time = device.Temperatures.Any()
+                    ? device.Temperatures.Last().Time.ToShortTimeString()
+                    : DateTime.Now.ToShortTimeString();
+                var newDeviceView = new DeviceView
+                {
+                    Id = device.Id,
+                    LastTemparature = temperature,
+                    Time = time,
+                    Profile = userDevice.Profile.Title,
+                    Title = userDevice.Title,
+                    Period = userDevice.Period
+                };
+
+                if (!userDevice.Profile.Intervals.Any(i => i.Start <= newDeviceView.LastTemparature && newDeviceView.LastTemparature <= i.End))
+                {
+                    newDeviceView.Status = "no";
+                }
+                else
+                {
+                    newDeviceView.Status = userDevice.Profile.Intervals.First(i => i.Start <= newDeviceView.LastTemparature && newDeviceView.LastTemparature <= i.End).Description;
+                }
+
+                deviceViewList.Add(newDeviceView);
+
+            }
+
+            return PartialView(deviceViewList);
         }
 
         [HttpGet]
