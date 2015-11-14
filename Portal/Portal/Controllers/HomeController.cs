@@ -29,7 +29,7 @@ namespace Portal.Controllers
                 else
                 {
                     h2 += string.Format("{0} {1}", userData.FirstName, userData.LastName);
-                    var deviceCount = userData.Devices.Count;
+                    var deviceCount = userData.UserDevices.Count;
                     if (deviceCount > 0)
                     {
                         h4 += string.Format("have {0} device(s)", deviceCount);

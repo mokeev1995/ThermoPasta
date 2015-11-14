@@ -23,6 +23,7 @@ namespace Portal.Models.Context
         public virtual DbSet<Interval> Intervals { get; set; }
         public virtual DbSet<CheckCode> CheckCodes { get; set; }
         public virtual DbSet<Temperature> Temperatures { get; set; }
+        public virtual DbSet<UserDevice> UserDevices { get; set; }
       
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

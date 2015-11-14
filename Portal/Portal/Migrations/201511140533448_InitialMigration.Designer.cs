@@ -13,7 +13,7 @@ namespace Portal.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201511131302590_InitialMigration"; }
+            get { return "201511140533448_InitialMigration"; }
         }
         
         string IMigrationMetadata.Source

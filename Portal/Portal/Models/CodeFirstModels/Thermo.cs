@@ -13,18 +13,7 @@ namespace Portal.Models.CodeFirstModels
 
         public string Id { get; set; }
 
-        [Required]
-        [StringLength(256)]
-        [MinLength(2)]
-        public string Title { get; set; }
-
-        public string UserDataId { get; set; }
-        public virtual UserData UserData { get; set; }
-
-        public int ProfileId { get; set; }
-        public virtual Profile Profile { get; set; }
-
-        public int Period { get; set; }
+        public virtual ICollection<UserDevice> UserDevices { get; set; }
 
         public virtual ICollection<Temperature> Temperatures { get; set; }
     }
@@ -95,5 +84,26 @@ namespace Portal.Models.CodeFirstModels
 
         [Required]
         public DateTime Time { get; set; }
+    }
+
+    public class UserDevice
+    {
+        public int Id { get; set; }
+
+        [Required]
+        [StringLength(256)]
+        [MinLength(2)]
+        public string Title { get; set; }
+
+        public string DeviceId { get; set; }
+        public virtual Device Device { get; set; }
+
+        public string UserDataId { get; set; }
+        public virtual UserData UserData { get; set; }
+
+        public int ProfileId { get; set; }
+        public virtual Profile Profile { get; set; }
+
+        public int Period { get; set; }
     }
 }
