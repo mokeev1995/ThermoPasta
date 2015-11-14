@@ -12,9 +12,9 @@ namespace Portal.Controllers
 {
     [Authorize]
     public class DeviceController : BaseController
-	{
+    {
         private readonly IUnitOfWork _uow;
-        public DeviceController(IUnitOfWork uow): base(uow)
+        public DeviceController(IUnitOfWork uow) : base(uow)
         {
             _uow = uow;
         }
@@ -47,15 +47,19 @@ namespace Portal.Controllers
             foreach (var userDevice in userDevices)
             {
                 var device = userDevice.Device;
+                var temperature = device.Temperatures.LastOrDefault(t => t.Time.Minute % userDevice.Period == 0);
+                if (temperature == null)
+                {
+                    temperature= device.Temperatures.Last();
+                }
 
-                var temperature = device.Temperatures.Any() ? device.Temperatures.Last().Value : 0;
-                var time = device.Temperatures.Any()
-                    ? device.Temperatures.Last().Time.ToShortTimeString()
-                    : DateTime.Now.ToShortTimeString();
+                var temperatureValue = temperature != null ? temperature.Value : 0;
+                var time = temperature != null ? temperature.Time.ToShortTimeString() : DateTime.Now.ToShortTimeString();
+
                 var newDeviceView = new DeviceView
                 {
                     Id = device.Id,
-                    LastTemparature = temperature,
+                    LastTemparature = temperatureValue,
                     Time = time,
                     Profile = userDevice.Profile.Title,
                     Title = userDevice.Title,
