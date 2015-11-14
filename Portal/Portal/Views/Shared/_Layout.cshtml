@@ -19,8 +19,9 @@
 
 </head>
 <body style="background-color: transparent">
-
+<header>
 	<div class="navbar navbar-inverse navbar-fixed-top">
+		<div class="topLine"></div>
 		<div class="container">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-inverse-collapse">
@@ -28,24 +29,26 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				@Html.ActionLink("Thermo", "Index", new { controller = "Home" }, new { @class = "navbar-brand" })
+				@Html.ActionLink("Thermo", "Index", new {controller = "Home"}, new {@class = "navbar-brand"})
 			</div>
 			<div class="navbar-collapse collapse navbar-inverse-collapse">
 				@Html.Partial("_LoginPartial")
 				<ul class="nav navbar-nav navbar-right">
-					<li class="DevicesPage">
+					<li class="device">
 						<a href="@Url.Action("Index", "Device")"><i class="mdi-device-devices menu-icon"></i> Devices</a>
 					</li>
-					<li class="GrapghsPage">
+					<li class="graph">
 						<a href="@Url.Action("Index", "Graph")"><i class="mdi-action-trending-up menu-icon"></i> Graphs</a>
 					</li>
-					<li class="ProfilesPage">
+					<li class="profile">
 						<a href="@Url.Action("Index", "Profile")"><i class="mdi-device-now-widgets menu-icon"></i> Profiles</a>
 					</li>
 				</ul>
 			</div>
 		</div> <!-- container end -->
 	</div> <!-- Navbar end -->
+
+</header>
 
 <div class="container body-content">
 	@RenderBody()
@@ -61,8 +64,7 @@
 <script>
 	$(document).ready(function() {
 		$.material.init();
-		var currentLocation = location.href.replace(location.origin, "").split("/")[1];
-		
+		$("." + location.href.replace(location.origin, "").split("/")[1].toLowerCase()).attr("class", "active");
 	});
 </script>
 
