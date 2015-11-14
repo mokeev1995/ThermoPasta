@@ -64,7 +64,7 @@ namespace Portal.Controllers
         }
 
         [HttpGet]
-        public void AddTemperature(string id, int value)
+        public void AddTemperature(string id, int ambientTemp, int objectTemp)
         {
             CheckAndAddDevice(id);
 
@@ -72,7 +72,7 @@ namespace Portal.Controllers
             {
                 DeviceId = id,
                 Time = DateTime.Now,
-                Value = value
+                Value = ambientTemp
             };
 
             _uow.TemperatureRepository.Insert(newTemperature);

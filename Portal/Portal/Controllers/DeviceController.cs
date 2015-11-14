@@ -159,7 +159,7 @@ namespace Portal.Controllers
         {
             var userId = User.Identity.GetUserId();
             var userData = _uow.UserDataRepository.GetById(userId);
-            var userDevice = userData.UserDevices.First(ud => ud.DeviceId == id);
+            var userDevice = userData.UserDevices.First(ud => ud.DeviceId.ToLowerInvariant() == id.ToLowerInvariant());
             var profiles = _uow.ProfileRepository.GetAll().Where(p => p.UserDataId == null || p.UserDataId == userId);
             var profilesList = new SelectList(profiles, "Id", "Title");
             ViewBag.Profiles = profilesList;
@@ -193,7 +193,7 @@ namespace Portal.Controllers
         {
             var userId = User.Identity.GetUserId();
             var userData = _uow.UserDataRepository.GetById(userId);
-            var userDevice = userData.UserDevices.First(ud => ud.DeviceId == model.Id);
+            var userDevice = userData.UserDevices.First(ud => ud.DeviceId.ToLowerInvariant() == model.Id.ToLowerInvariant());
             var profiles = _uow.ProfileRepository.GetAll().Where(p => p.UserDataId == null || p.UserDataId == userId);
             var profilesList = new SelectList(profiles, "Id", "Title");
             ViewBag.Profiles = profilesList;
@@ -225,7 +225,7 @@ namespace Portal.Controllers
 
             var userId = User.Identity.GetUserId();
             var userData = _uow.UserDataRepository.GetById(userId);
-            var userDevice = userData.UserDevices.First(ud => ud.DeviceId == id);
+            var userDevice = userData.UserDevices.First(ud => ud.DeviceId.ToLowerInvariant() == id.ToLowerInvariant());
             if (userDevice == null)
             {
                 return HttpNotFound();
@@ -247,7 +247,7 @@ namespace Portal.Controllers
         {
             var userId = User.Identity.GetUserId();
             var userData = _uow.UserDataRepository.GetById(userId);
-            var userDevice = userData.UserDevices.First(ud => ud.DeviceId == id);
+            var userDevice = userData.UserDevices.First(ud => ud.DeviceId.ToLowerInvariant() == id.ToLowerInvariant());
 
             _uow.UserDeviceRepository.Delete(userDevice);
             _uow.Save();
