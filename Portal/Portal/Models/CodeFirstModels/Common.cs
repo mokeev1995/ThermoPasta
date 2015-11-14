@@ -63,7 +63,7 @@ namespace Portal.Models.CodeFirstModels
     {
         public UserData()
         {
-            Devices = new HashSet<Device>();
+            UserDevices = new HashSet<UserDevice>();
             Profiles = new HashSet<Profile>();
         }
         public string Id { get; set; }
@@ -78,7 +78,7 @@ namespace Portal.Models.CodeFirstModels
         [MinLength(2)]
         public string LastName { get; set; }
 
-        public virtual ICollection<Device> Devices { get; set; }
+        public virtual ICollection<UserDevice> UserDevices { get; set; }
         public virtual ICollection<Profile> Profiles { get; set; }
     }
 }

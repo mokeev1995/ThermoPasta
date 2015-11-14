@@ -21,6 +21,8 @@ namespace Portal.Controllers
         {
             if (id != null)
             {
+                CheckAndAddDevice(id);
+
                 if (!_uow.CheckCodeRepository.GetAll().Any(cc => cc.Id == id))
                 {
                     var random = new Random();
@@ -42,38 +44,37 @@ namespace Portal.Controllers
                     return newCode;
                 }
 
-                return "Already added.";
+                return _uow.CheckCodeRepository.GetById(id).Code;
             }
 
             return "Error.";
         }
 
-        [HttpGet]
-        public int AddTemperature(string id, int value)
+        private void CheckAndAddDevice(string id)
         {
-            var devices = _uow.DeviceRepository.GetAll().Where(d => d.Id == id).ToList();
-
-            if (devices.Count > 0)
+            if (!_uow.DeviceRepository.GetAll().Any(d => d.Id == id))
             {
-                var newTemperature = new Temperature
+                _uow.DeviceRepository.Insert(new Device
                 {
-                    DeviceId = id,
-                    Time = DateTime.Now,
-                    Value = value
-                };
-
-                _uow.TemperatureRepository.Insert(newTemperature);
-                _uow.Save();
-
-                //var period = devices[0].Period;
-                var r = new Random();
-                var period = r.Next(1,3);
-
-                Debug.Print(period.ToString());
-                return period;
+                    Id = id
+                });
             }
+        }
 
-            return 1;
+        [HttpGet]
+        public void AddTemperature(string id, int value)
+        {
+            CheckAndAddDevice(id);
+
+            var newTemperature = new Temperature
+            {
+                DeviceId = id,
+                Time = DateTime.Now,
+                Value = value
+            };
+
+            _uow.TemperatureRepository.Insert(newTemperature);
+            _uow.Save();
         }
     }
 }

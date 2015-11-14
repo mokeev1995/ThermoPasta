@@ -75,14 +75,38 @@ namespace Portal.Migrations
                 c => new
                     {
                         Id = c.String(nullable: false, maxLength: 128),
+                    })
+                .PrimaryKey(t => t.Id);
+            
+            CreateTable(
+                "dbo.Temperatures",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        DeviceId = c.String(nullable: false, maxLength: 128),
+                        Value = c.Int(nullable: false),
+                        Time = c.DateTime(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Devices", t => t.DeviceId, cascadeDelete: true)
+                .Index(t => t.DeviceId);
+            
+            CreateTable(
+                "dbo.UserDevices",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
                         Title = c.String(nullable: false, maxLength: 256),
+                        DeviceId = c.String(maxLength: 128),
                         UserDataId = c.String(maxLength: 128),
                         ProfileId = c.Int(nullable: false),
                         Period = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Devices", t => t.DeviceId)
                 .ForeignKey("dbo.UserDatas", t => t.UserDataId)
                 .ForeignKey("dbo.Profiles", t => t.ProfileId, cascadeDelete: true)
+                .Index(t => t.DeviceId)
                 .Index(t => t.UserDataId)
                 .Index(t => t.ProfileId);
             
@@ -124,19 +148,6 @@ namespace Portal.Migrations
                 .PrimaryKey(t => t.Id);
             
             CreateTable(
-                "dbo.Temperatures",
-                c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        DeviceId = c.String(nullable: false, maxLength: 128),
-                        Value = c.Int(nullable: false),
-                        Time = c.DateTime(nullable: false),
-                    })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Devices", t => t.DeviceId, cascadeDelete: true)
-                .Index(t => t.DeviceId);
-            
-            CreateTable(
                 "dbo.AspNetUserRoles",
                 c => new
                     {
@@ -153,29 +164,32 @@ namespace Portal.Migrations
         
         public override void Down()
         {
-            DropForeignKey("dbo.Temperatures", "DeviceId", "dbo.Devices");
-            DropForeignKey("dbo.Devices", "ProfileId", "dbo.Profiles");
+            DropForeignKey("dbo.UserDevices", "ProfileId", "dbo.Profiles");
+            DropForeignKey("dbo.UserDevices", "UserDataId", "dbo.UserDatas");
             DropForeignKey("dbo.Profiles", "UserDataId", "dbo.UserDatas");
-            DropForeignKey("dbo.Devices", "UserDataId", "dbo.UserDatas");
             DropForeignKey("dbo.Intervals", "ProfileId", "dbo.Profiles");
+            DropForeignKey("dbo.UserDevices", "DeviceId", "dbo.Devices");
+            DropForeignKey("dbo.Temperatures", "DeviceId", "dbo.Devices");
             DropForeignKey("dbo.AspNetUserRoles", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserRoles", "RoleId", "dbo.AspNetRoles");
             DropForeignKey("dbo.AspNetUserLogins", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserClaims", "UserId", "dbo.AspNetUsers");
             DropIndex("dbo.AspNetUserRoles", new[] { "UserId" });
             DropIndex("dbo.AspNetUserRoles", new[] { "RoleId" });
-            DropIndex("dbo.Temperatures", new[] { "DeviceId" });
             DropIndex("dbo.Intervals", new[] { "ProfileId" });
             DropIndex("dbo.Profiles", new[] { "UserDataId" });
-            DropIndex("dbo.Devices", new[] { "ProfileId" });
-            DropIndex("dbo.Devices", new[] { "UserDataId" });
+            DropIndex("dbo.UserDevices", new[] { "ProfileId" });
+            DropIndex("dbo.UserDevices", new[] { "UserDataId" });
+            DropIndex("dbo.UserDevices", new[] { "DeviceId" });
+            DropIndex("dbo.Temperatures", new[] { "DeviceId" });
             DropIndex("dbo.AspNetUserLogins", new[] { "UserId" });
             DropIndex("dbo.AspNetUserClaims", new[] { "UserId" });
             DropTable("dbo.AspNetUserRoles");
-            DropTable("dbo.Temperatures");
             DropTable("dbo.UserDatas");
             DropTable("dbo.Intervals");
             DropTable("dbo.Profiles");
+            DropTable("dbo.UserDevices");
+            DropTable("dbo.Temperatures");
             DropTable("dbo.Devices");
             DropTable("dbo.CheckCodes");
             DropTable("dbo.AspNetUserLogins");

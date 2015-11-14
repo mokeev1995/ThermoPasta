@@ -37,7 +37,7 @@ namespace Portal.Controllers
                 {
                     h2 += string.Format("{0} {1}", userData.FirstName, userData.LastName);
 	                ViewBag.UserName = userData.FirstName + " " + userData.LastName;
-                    var deviceCount = userData.Devices.Count;
+                    var deviceCount = userData.UserDevices.Count;
                     if (deviceCount > 0)
                     {
                         h4 += string.Format("have {0} device(s)", deviceCount);

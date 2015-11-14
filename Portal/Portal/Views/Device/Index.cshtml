@@ -1,6 +1,4 @@
-﻿@model IEnumerable<Portal.Models.ViewModels.DeviceView>
-
-@{
+﻿@{
     ViewBag.Title = "Devices";
 }
 
@@ -11,54 +9,17 @@
 	@*
 	@Html.ActionLink("", "Create", new { controller = "Device"}, new { @class = "btn btn-warning btn-fab btn-raised mdi-action-grade" })*@
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Title)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Profile)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.LastTemparature)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Time)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Status)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Period)
-        </th>
-        <th></th>
-    </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Title)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Profile)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LastTemparature)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Time)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Status)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Period)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
-}
+<div class="row">
+    <div id="replacetarget">
+        @{ Html.RenderAction("List", "Device"); }
+    </div>
+</div>
 
-</table>
+<script type="text/javascript">
+    var myVar = setInterval(myTimer, 10000);
+
+    function myTimer() {
+        $('#replacetarget').load('@Url.Action("List")');
+    }
+</script>

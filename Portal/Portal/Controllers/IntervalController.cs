@@ -17,7 +17,7 @@ namespace Portal.Controllers
             _uow = uow;
         }
         // GET: Interval
-        public async Task<ActionResult> Index(int id)
+        public ActionResult Index(int id)
         {
             ViewBag.ProfileId = id;
             var intervals = _uow.IntervalRepository.GetAll().Where(i => i.ProfileId == id).OrderBy(i => i.Start);
@@ -68,7 +68,7 @@ namespace Portal.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(IntervalCreate intervalView)
+        public ActionResult Create(IntervalCreate intervalView)
         {
             if (ModelState.IsValid)
             {
@@ -91,7 +91,7 @@ namespace Portal.Controllers
         }
 
 
-        public async Task<ActionResult> Edit(int? id)
+        public ActionResult Edit(int? id)
         {
             if (id == null)
             {
@@ -116,10 +116,9 @@ namespace Portal.Controllers
             return PartialView(intervalVirew);
         }
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Start,End,Description")] IntervalCreate intervalCreate)
+        public ActionResult Edit([Bind(Include = "Id,Start,End,Description")] IntervalCreate intervalCreate)
         {
             if (ModelState.IsValid)
             {
@@ -140,7 +139,7 @@ namespace Portal.Controllers
             return PartialView(intervalCreate);
         }
 
-        public async Task<ActionResult> Delete(int? id)
+        public ActionResult Delete(int? id)
         {
             if (id == null)
             {
@@ -164,7 +163,7 @@ namespace Portal.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(int id)
         {
             var interval = _uow.IntervalRepository.GetById(id);
             _uow.IntervalRepository.Delete(interval);
@@ -174,6 +173,12 @@ namespace Portal.Controllers
             return Json(new { success = true, url = url });
         }
 
+        //private bool IsValidInterval(Interval interval)
+        //{
+        //    var intervls = _uow.IntervalRepository.GetAll().Where(i => i.ProfileId == interval.ProfileId).OrderBy(i => i.Start).ToList();
+
+        //}
+      
         protected override void Dispose(bool disposing)
         {
             if (disposing)

@@ -15,6 +15,7 @@ namespace Portal.DAL
         private IRepository<Interval> _intervalRepository;
         private IRepository<CheckCode> _checkCodeRepository;
         private IRepository<Temperature> _temperatureRepository;
+        private IRepository<UserDevice> _userDeviceRepository;
 
         public IRepository<AspNetUser> AspNetUserRepository
         {
@@ -88,6 +89,18 @@ namespace Portal.DAL
             }
         }
 
+
+        public IRepository<UserDevice> UserDeviceRepository
+        {
+            get
+            {
+                if (_userDeviceRepository == null)
+                {
+                    _userDeviceRepository = new GenericRepository<UserDevice>(_context);
+                }
+                return _userDeviceRepository;
+            }
+        }
 
         public void Save()
         {

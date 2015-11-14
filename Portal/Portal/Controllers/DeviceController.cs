@@ -18,6 +18,7 @@ namespace Portal.Controllers
         {
             _uow = uow;
         }
+
         // GET: Device
         public ActionResult Index()
         {
@@ -26,41 +27,55 @@ namespace Portal.Controllers
 
             if (userData != null)
             {
-                var devices = userData.Devices.ToList();
-                var devicesView = new List<DeviceView>();
-                foreach (var device in devices)
-                {
-                    var temperature = device.Temperatures.Any() ? device.Temperatures.Last().Value : 0;
-                    var time = device.Temperatures.Any()
-                        ? device.Temperatures.Last().Time.ToShortTimeString()
-                        : DateTime.Now.ToShortTimeString();
-                    var newDeviceView = new DeviceView
-                    {
-                        Id = device.Id,
-                        LastTemparature = temperature,
-                        Time = time,
-                        Profile = device.Profile.Title,
-                        Title = device.Title,
-                        Period = device.Period
-                    };
-
-                    if (!device.Profile.Intervals.Any(i => i.Start <= newDeviceView.LastTemparature && newDeviceView.LastTemparature <= i.End))
-                    {
-                        newDeviceView.Status = "no";
-                    }
-                    else
-                    {
-                        newDeviceView.Status = device.Profile.Intervals.First(i => i.Start <= newDeviceView.LastTemparature && newDeviceView.LastTemparature <= i.End).Description;
-                    }
-
-                    devicesView.Add(newDeviceView);
-                }
-                return View(devicesView);
+                return View();
             }
             else
             {
                 return RedirectToAction("ChangeUserData", "Manage");
             }
+        }
+
+
+        public ActionResult List()
+        {
+            var userId = User.Identity.GetUserId();
+            var userData = _uow.UserDataRepository.GetById(userId);
+
+            var deviceViewList = new List<DeviceView>();
+
+            var userDevices = userData.UserDevices;
+            foreach (var userDevice in userDevices)
+            {
+                var device = userDevice.Device;
+
+                var temperature = device.Temperatures.Any() ? device.Temperatures.Last().Value : 0;
+                var time = device.Temperatures.Any()
+                    ? device.Temperatures.Last().Time.ToShortTimeString()
+                    : DateTime.Now.ToShortTimeString();
+                var newDeviceView = new DeviceView
+                {
+                    Id = device.Id,
+                    LastTemparature = temperature,
+                    Time = time,
+                    Profile = userDevice.Profile.Title,
+                    Title = userDevice.Title,
+                    Period = userDevice.Period
+                };
+
+                if (!userDevice.Profile.Intervals.Any(i => i.Start <= newDeviceView.LastTemparature && newDeviceView.LastTemparature <= i.End))
+                {
+                    newDeviceView.Status = "no";
+                }
+                else
+                {
+                    newDeviceView.Status = userDevice.Profile.Intervals.First(i => i.Start <= newDeviceView.LastTemparature && newDeviceView.LastTemparature <= i.End).Description;
+                }
+
+                deviceViewList.Add(newDeviceView);
+
+            }
+
+            return PartialView(deviceViewList);
         }
 
         [HttpGet]
@@ -89,6 +104,7 @@ namespace Portal.Controllers
         public ActionResult Create(DeviceCreate model)
         {
             var userId = User.Identity.GetUserId();
+            var userData = _uow.UserDataRepository.GetById(userId);
             var profiles = _uow.ProfileRepository.GetAll().Where(p => p.UserDataId == null || p.UserDataId == userId);
             var profilesList = new SelectList(profiles, "Id", "Title");
             ViewBag.Profiles = profilesList;
@@ -99,21 +115,28 @@ namespace Portal.Controllers
 
                 if (checkCodes.Any())
                 {
-                    if (checkCodes.First().Time.AddMinutes(15) >= DateTime.Now)
-                    {
-                        var newDevice = new Device
-                        {
-                            Title = model.Title,
-                            ProfileId = model.ProfileId,
-                            Id = _uow.CheckCodeRepository.GetAll().First(cc => cc.Code == model.Code).Id,
-                            UserDataId = userId,
-                            Period = model.Period
-                        };
-                        _uow.DeviceRepository.Insert(newDevice);
-                        _uow.CheckCodeRepository.Delete(newDevice.Id);
-                        _uow.Save();
+                    var checkCode = checkCodes.First();
 
-                        return RedirectToAction("Index");
+                    if (checkCode.Time.AddMinutes(15) >= DateTime.Now)
+                    {
+                        if (userData.UserDevices.All(ud => ud.DeviceId != checkCode.Id))
+                        {
+                            var userDevice = new UserDevice
+                            {
+                                DeviceId = checkCode.Id,
+                                Title = model.Title,
+                                ProfileId = model.ProfileId,
+                                UserDataId = userId,
+                                Period = model.Period
+                            };
+                            _uow.UserDeviceRepository.Insert(userDevice);
+                            _uow.CheckCodeRepository.Delete(checkCode);
+                            _uow.Save();
+
+                            return RedirectToAction("Index");
+                        }
+
+                        ModelState.AddModelError("", "You already added this device.");
                     }
 
                     ModelState.AddModelError("", "Time expired. Please, press button on device again.");
@@ -131,6 +154,8 @@ namespace Portal.Controllers
         public ActionResult Edit(string id)
         {
             var userId = User.Identity.GetUserId();
+            var userData = _uow.UserDataRepository.GetById(userId);
+            var userDevice = userData.UserDevices.First(ud => ud.DeviceId == id);
             var profiles = _uow.ProfileRepository.GetAll().Where(p => p.UserDataId == null || p.UserDataId == userId);
             var profilesList = new SelectList(profiles, "Id", "Title");
             ViewBag.Profiles = profilesList;
@@ -140,28 +165,19 @@ namespace Portal.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var device = _uow.DeviceRepository.GetById(id);
-
             var periods = new int[60];
             for (int i = 0; i < 60; i++)
             {
                 periods[i] = i + 1;
             }
-            //ViewBag.Periods = new SelectList(periods, device.Period);
             ViewBag.Periods = periods;
-            ViewBag.Period = device.Period;
-
-
-            if (device == null)
-            {
-                return HttpNotFound();
-            }
+            ViewBag.Period = userDevice.Period;
 
             var deviceEdit = new DeviceEdit
             {
-                Id = device.Id,
-                Title = device.Title,
-                ProfileId = device.ProfileId
+                Id = id,
+                Title = userDevice.Title,
+                ProfileId = userDevice.ProfileId
 
             };
             return View(deviceEdit);
@@ -172,22 +188,23 @@ namespace Portal.Controllers
         public ActionResult Edit(DeviceEdit model)
         {
             var userId = User.Identity.GetUserId();
+            var userData = _uow.UserDataRepository.GetById(userId);
+            var userDevice = userData.UserDevices.First(ud => ud.DeviceId == model.Id);
             var profiles = _uow.ProfileRepository.GetAll().Where(p => p.UserDataId == null || p.UserDataId == userId);
             var profilesList = new SelectList(profiles, "Id", "Title");
             ViewBag.Profiles = profilesList;
 
             if (ModelState.IsValid)
             {
-                var device = _uow.DeviceRepository.GetById(model.Id);
-                device.ProfileId = model.ProfileId;
-                device.Title = model.Title;
+                userDevice.ProfileId = model.ProfileId;
+                userDevice.Title = model.Title;
 
-                if (device.Period != model.Period)
+                if (userDevice.Period != model.Period)
                 {
-                    device.Period = model.Period;
+                    userDevice.Period = model.Period;
                 }
 
-                _uow.DeviceRepository.Update(device);
+                _uow.UserDeviceRepository.Update(userDevice);
                 _uow.Save();
 
                 return RedirectToAction("Index");
@@ -202,17 +219,19 @@ namespace Portal.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var device = _uow.DeviceRepository.GetById(id);
-            if (device == null)
+            var userId = User.Identity.GetUserId();
+            var userData = _uow.UserDataRepository.GetById(userId);
+            var userDevice = userData.UserDevices.First(ud => ud.DeviceId == id);
+            if (userDevice == null)
             {
                 return HttpNotFound();
             }
 
             var deviceView = new DeviceView
             {
-                Id = device.Id,
-                Title = device.Title,
-                Profile = device.Profile.Title
+                Id = userDevice.DeviceId,
+                Title = userDevice.Title,
+                Profile = userDevice.Profile.Title
             };
 
             return View(deviceView);
@@ -222,7 +241,11 @@ namespace Portal.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(string id)
         {
-            _uow.DeviceRepository.Delete(id);
+            var userId = User.Identity.GetUserId();
+            var userData = _uow.UserDataRepository.GetById(userId);
+            var userDevice = userData.UserDevices.First(ud => ud.DeviceId == id);
+
+            _uow.UserDeviceRepository.Delete(userDevice);
             _uow.Save();
             return RedirectToAction("Index");
         }

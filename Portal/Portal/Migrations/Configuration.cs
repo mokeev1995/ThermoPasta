@@ -148,21 +148,34 @@ namespace Portal.Migrations
 
             var teapot = new Device
             {
-                Id = "teapot's MAC",
-                ProfileId = 1,
-                Title = "electric teapot in kitchen",
-                UserDataId = KirillData.Id,
-                Period = 1
+                Id = "teapotMAC",
+
             };
             var pool = new Device
             {
-                Id = "pool's MAC",
+                Id = "poolMAC",
+
+            };
+            context.Devices.AddOrUpdate(d => d.Id, teapot, pool);
+            context.SaveChanges();
+
+            var teapotUserDevice = new UserDevice
+            {
+                UserDataId = KirillData.Id,
+                DeviceId = teapot.Id,
+                ProfileId = 1,
+                Title = "electric teapot in kitchen",
+                Period = 1
+            };
+            var poolUserDevice = new UserDevice
+            {
+                DeviceId = pool.Id,
                 ProfileId = 2,
                 Title = "pool in front of house",
                 UserDataId = KirillData.Id,
                 Period = 30
             };
-            context.Devices.AddOrUpdate(d => d.Id, teapot, pool);
+            context.UserDevices.AddOrUpdate(d => d.Title, teapotUserDevice, poolUserDevice);
             context.SaveChanges();
 
             context.Temperatures.AddOrUpdate(t=>t.Time,
