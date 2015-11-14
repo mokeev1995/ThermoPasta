@@ -171,3 +171,7 @@ header .navbar .navbar-nav>.active>a:focus{
 html, body {
 	background-color: #FAFAFA;
 }
+
+input, select, textarea {
+	max-width: none;
+}
