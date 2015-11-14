@@ -50,7 +50,7 @@ namespace Portal.Controllers
                 var temperature = device.Temperatures.LastOrDefault(t => t.Time.Minute % userDevice.Period == 0);
                 if (temperature == null)
                 {
-                    temperature= device.Temperatures.Last();
+                    temperature= device.Temperatures.LastOrDefault();
                 }
 
                 var temperatureValue = temperature != null ? temperature.Value : 0;

@@ -1,9 +1,9 @@
 ﻿
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Graphs";
 }
 
-<h2>Index</h2>
+<h2>Graphs for your devices</h2>
 
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type="text/javascript">
@@ -11,18 +11,6 @@
     google.setOnLoadCallback(drawChart);
 
     function drawChart() {
-        var jsonData = $.ajax({
-            url: "@Url.Action("GetTemperatures")",
-            dataType: "json",
-            contentType: "application/json",
-            async: false
-        }).responseJSON;
-
-        var data = [];
-        for (var i = 0; i < jsonData.length; ++i) {
-            data[i] = google.visualization.arrayToDataTable(jsonData[i].value);
-        }
-
         var options = {
             title: 'Температура в градусах цельсия',
             isStacked: false,
@@ -37,11 +25,26 @@
             vAxis: { minValue: 0 }
         };
 
-        for (var i = 0; i < jsonData.length; ++i) {
-            $('#chart_label' + i).text(jsonData[i].name);
-            var chart = new google.visualization.AreaChart(document.getElementById('chart_div' + i));
-            chart.draw(data[i], options);
-        }
+
+        $.ajax({
+            url: "@Url.Action("GetTemperatures")",
+            dataType: "json",
+            contentType: "application/json"
+           
+        }).done(function (jsonData) {
+            var data = [];
+            for (var i = 0; i < jsonData.length; ++i) {
+                data[i] = google.visualization.arrayToDataTable(jsonData[i].value);
+            }
+
+            for (var i = 0; i < jsonData.length; ++i) {
+                $('#chart_label' + i).text(jsonData[i].name);
+                var chart = new google.visualization.AreaChart(document.getElementById('chart_div' + i));
+                chart.draw(data[i], options);
+            }
+        })
+
+      
     }
 </script>
 
