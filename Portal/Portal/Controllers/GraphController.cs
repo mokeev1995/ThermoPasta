@@ -8,99 +8,141 @@ using Portal.Models.CodeFirstModels;
 
 namespace Portal.Controllers
 {
-    [Authorize]
-    public class GraphController : BaseController
+	[Authorize]
+	public class GraphController : BaseController
 	{
-        private readonly IUnitOfWork _uow;
-        public GraphController(IUnitOfWork uow) : base(uow)
-        {
-            _uow = uow;
-        }
+		private readonly IUnitOfWork _uow;
+		public GraphController(IUnitOfWork uow) : base(uow)
+		{
+			_uow = uow;
+		}
 
-        public ActionResult Index()
-        {
-	        if (User.Identity.IsAuthenticated)
-	        {
+		public ActionResult Index()
+		{
+			if (User.Identity.IsAuthenticated)
+			{
 				var userId = User.Identity.GetUserId();
 				var userData = _uow.UserDataRepository.GetById(userId);
-		        if (userData != null)
-		        {
-			        var userDevices = userData.UserDevices;
+				if (userData != null)
+				{
+					var userDevices = userData.UserDevices;
 					var deviceCount = userDevices.Count;
 
 					ViewBag.DevicesCount = deviceCount;
 				}
-	        }
+			}
 
-            return View();
-        }
+			return View();
+		}
 
-        [HttpGet]
-        [Authorize]
-        public JsonResult GetTemperatures()
-        {
-            var userId = User.Identity.GetUserId();
-            var userData = _uow.UserDataRepository.GetById(userId);
-            var userDevices = userData.UserDevices;
-            var deviceTemperatures = new List<object>();
-            foreach (var userDevice in userDevices)
-            {
-                deviceTemperatures.Add(new { name = userDevice.Title, value = GetTemperaturesForDevice(userDevice) });
-            }
+		[HttpGet]
+		[Authorize]
+		public JsonResult GetTemperatures()
+		{
+			var userId = User.Identity.GetUserId();
+			var userData = _uow.UserDataRepository.GetById(userId);
+			var userDevices = userData.UserDevices;
+			var deviceTemperatures = new List<object>();
+			foreach (var userDevice in userDevices)
+			{
+				deviceTemperatures.Add(new { name = userDevice.Title, value = GetTemperaturesForDevice(userDevice) });
+			}
 
-            return Json(deviceTemperatures, JsonRequestBehavior.AllowGet);
-        }
+			return Json(deviceTemperatures, JsonRequestBehavior.AllowGet);
+		}
 
-        private object GetTemperaturesForDevice(UserDevice userDevice)
-        {
-            var deviceTemperatures = new List<object> { new IComparable[] { "Time", "Measured", "Predicted" } };
+		private object GetTemperaturesForDevice(UserDevice userDevice)
+		{
+			var deviceTemperatures = new List<object> { new IComparable[] { "Time", "Measured", "Predicted" } };
 
-            var temperatures = userDevice.Device.Temperatures.Reverse().Take(10).Reverse().ToArray();
-            List<double> arguments = new List<double>();
-            List<double> temperatureValues = new List<double>();
-           
-            DateTime time;
-            double temperature;
-            var count = temperatures.Length <= 11 ? temperatures.Length : 10;
-            var extend = new double[5];
-            for (int i = 0; i < 5; i++)
-            {
-                extend[i] = i + count;
-            }
-            for (var i = 0; i < count - 1; ++i)
-            {
-                temperature = temperatures[i].Value;
-                time = temperatures[i].Time;
-                arguments.Add(i);
-                temperatureValues.Add(temperature);
-                deviceTemperatures.Add(new IComparable[] { time.ToShortTimeString(), temperature, null });
-            }
+			var temperatures = userDevice.Device.Temperatures.Reverse().Take(10).Reverse().ToArray();
+			List<double> arguments = new List<double>();
+			List<double> temperatureValues = new List<double>();
 
-            temperature = temperatures[count - 1].Value;
-            time = temperatures[count - 1].Time;
-            arguments.Add(count - 1);
-            temperatureValues.Add(temperature);
-            deviceTemperatures.Add(new IComparable[] { time.ToShortTimeString(), temperature, temperature });
+			DateTime time;
+			double temperature;
 
-            var interpolantValue = Interpolant(arguments.ToArray(), temperatureValues.ToArray(), extend);
-            for (var i = 0; i < interpolantValue.Length; ++i)
-            {
-                var time2 = time.AddMinutes(i + 1);
-                deviceTemperatures.Add(new IComparable[] { time2.ToShortTimeString(), null, interpolantValue[i] });
-            }
+		
 
-            return deviceTemperatures;
-        }
+			//for (var i = 0; i < 10 && temperatures.Count < 10; ++i)
+			//{
+			//	temperatures.Add(new Temperature
+			//	{
+			//		Value = 0,
+			//		Time = DateTime.Now
+			//	});
+			//}
 
-        private double[] Interpolant(double[] arguments, double[] values, double[] extendsArguments)
-        {
-            alglib.spline1dinterpolant line;
-			
+			var count = temperatures.Count();
+			var extend = new double[5];
+
+			for (int i = 0; i < 5; i++)
+			{
+				extend[i] = i + 10;
+			}
+
+			for (var i = 0; i < count - 1; ++i)
+			{
+				temperature = temperatures[i].Value;
+				time = temperatures[i].Time;
+				arguments.Add(i);
+				temperatureValues.Add(temperature);
+				deviceTemperatures.Add(new IComparable[] {time.ToShortTimeString(), temperature, null});
+			}
+
+			while (temperatureValues.Count < 10)
+			{
+				temperatureValues.Insert(0, 0D);
+				var temp1 = deviceTemperatures[0] as IComparable[];
+				if (temp1 == null) continue;
+
+				var tempTemperature = temp1[0] as string;
+				DateTime deviceTemperature;
+				var success = DateTime.TryParse(tempTemperature, out deviceTemperature);
+				if (!success)
+					deviceTemperature = DateTime.Now;
+				var temp = deviceTemperature.AddMinutes(-1);
+
+				deviceTemperatures.Insert(1, new IComparable[] { temp.ToShortTimeString(), 0, null });
+				if (arguments.Count > 0)
+					arguments.Add(arguments.Last() + 1);
+				else
+					arguments.Add(0);
+			}
+
+			if (count == 10)
+			{
+				temperature = temperatures[count - 1].Value;
+				time = temperatures[count - 1].Time;
+				arguments.Add(count - 1);
+				temperatureValues.Add(temperature);
+				deviceTemperatures.Add(new IComparable[] {time.ToShortTimeString(), temperature, temperature });
+			}
+			else
+			{
+				time = DateTime.Now;
+				deviceTemperatures.Add(new IComparable[] { time.ToShortTimeString(), 0, 0});
+			}
+
+			var interpolantValue = Interpolant(arguments.ToArray(), temperatureValues.ToArray(), extend);
+			for (var i = 0; i < interpolantValue.Length; ++i)
+			{
+				var time2 = time.AddMinutes(i + 1);
+				deviceTemperatures.Add(new IComparable[] {time2.ToShortTimeString(), null, interpolantValue[i] });
+			}
+
+			return deviceTemperatures;
+		}
+
+		private double[] Interpolant(double[] arguments, double[] values, double[] extendsArguments)
+		{
+			alglib.spline1dinterpolant line;
+
 			//This is govnocode here
-	        var args = arguments.ToList();
-	        var lastArg = extendsArguments[extendsArguments.Length - 1];
-            args.Add(lastArg);
-	        var vals = values.ToList();
+			var args = arguments.ToList();
+			var lastArg = extendsArguments[extendsArguments.Length - 1];
+			args.Add(lastArg);
+			var vals = values.ToList();
 
 			double rsquare;
 			double yintercept;
@@ -111,13 +153,13 @@ namespace Portal.Controllers
 			alglib.spline1dbuildakima(args.ToArray(), vals.ToArray(), out line);
 
 			var result = new List<double>();
-            foreach (var xE in extendsArguments)
-            {
-                result.Add(alglib.spline1dcalc(line, xE));
-            }
+			foreach (var xE in extendsArguments)
+			{
+				result.Add(alglib.spline1dcalc(line, xE));
+			}
 
-            return result.ToArray();
-        }
+			return result.ToArray();
+		}
 
 		/// <summary>
 		/// Fits a line to a collection of (x,y) points.
