@@ -93,17 +93,28 @@ namespace Portal.Controllers
 			while (temperatureValues.Count < 10)
 			{
 				temperatureValues.Insert(0, 0D);
-				var temp1 = deviceTemperatures[0] as IComparable[];
-				if (temp1 == null) continue;
-
-				var tempTemperature = temp1[0] as string;
 				DateTime deviceTemperature;
-				var success = DateTime.TryParse(tempTemperature, out deviceTemperature);
-				if (!success)
+				DateTime temp;
+				if (temperatureValues.Count < 2)
+				{
 					deviceTemperature = DateTime.Now;
-				var temp = deviceTemperature.AddMinutes(-1);
+					temp = deviceTemperature.AddMinutes(-1);
+					deviceTemperatures.Insert(1, new IComparable[] {temp.ToShortTimeString(), 0, null});
+				}
+				else
+				{
+					var temp1 = deviceTemperatures[1] as IComparable[];
+					if (temp1 == null) continue;
 
-				deviceTemperatures.Insert(1, new IComparable[] { temp.ToShortTimeString(), 0, null });
+					var tempTemperature = temp1[0] as string;
+					var success = DateTime.TryParse(tempTemperature, out deviceTemperature);
+					if (!success)
+						deviceTemperature = DateTime.Now;
+					temp = deviceTemperature.AddMinutes(-1);
+
+					deviceTemperatures.Insert(1, new IComparable[] { temp.ToShortTimeString(), 0, null });
+				}
+				
 				if (arguments.Count > 0)
 					arguments.Add(arguments.Last() + 1);
 				else
