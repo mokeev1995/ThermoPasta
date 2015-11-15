@@ -78,24 +78,6 @@ namespace Portal.Controllers
             _uow.TemperatureRepository.Insert(newTemperature);
             _uow.Save();
 
-            var userDevice = _uow.UserDeviceRepository.GetAll().ToList().LastOrDefault(d => d.DeviceId == id);
-            if (userDevice != null)
-            {
-                var person = userDevice.UserData.LastName + " " + userDevice.UserData.FirstName;
-                if (TempData.Peek(codes) == null)
-                {
-                    TempData[codes] = new Dictionary<string, string>();
-                }
-
-                var dictionary = TempData.Peek(codes) as Dictionary<string, string>;
-                if ((dictionary.ContainsKey(id) && dictionary[id] != person) || (!dictionary.ContainsKey(id)))
-                {
-                    dictionary[id] = person;
-                    //   TempData[codes] = dictionary;
-                    return person;
-                }
-            }
-
 
             return "OK";
         }
