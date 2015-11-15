@@ -79,7 +79,7 @@ namespace Portal.Controllers
 				deviceTemperatures.Add(new IComparable[] {time.ToShortTimeString(), temperature, null});
 			}
 
-			while (temperatureValues.Count < 10)
+			while (temperatureValues.Count < 9)
 			{
 				temperatureValues.Insert(0, 0D);
 				DateTime deviceTemperature;
