@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimal-ui, minimum-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-	<title>@ViewBag.Title</title>
+	<title>@ViewBag.Title | Thermo</title>
 	@Styles.Render("~/Content/css")
 
 	<link href="~/Content/ripples.min.css" rel="stylesheet" />
@@ -64,7 +64,12 @@
 <script>
 	$(document).ready(function() {
 		$.material.init();
-		$("." + location.href.replace(location.origin, "").split("/")[1].toLowerCase()).attr("class", "active");
+
+		var route = location.href.replace(location.origin, "").split("/")[1].toLowerCase();
+		if (route !== "manage")
+			$("." + route).attr("class", "active");
+		else
+			$(".loginLink").attr("class", "active");
 	});
 </script>
 

@@ -51,7 +51,7 @@ namespace Portal.Controllers
 
         private object GetTemperaturesForDevice(UserDevice userDevice)
         {
-            var deviceTemperatures = new List<object> { new IComparable[] { "Время", "Измеренная", "Прогнозируемая" } };
+            var deviceTemperatures = new List<object> { new IComparable[] { "Time", "Measured", "Predicted" } };
 
             var temperatures = userDevice.Device.Temperatures.Reverse().Take(10).Reverse().ToArray();
             List<double> arguments = new List<double>();

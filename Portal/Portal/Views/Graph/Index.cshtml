@@ -10,43 +10,66 @@
     google.load("visualization", "1", { packages: ["corechart"] });
     google.setOnLoadCallback(drawChart);
 
+    window.graphData = {};
+
+    window.options = {
+    	title: 'Temperature in celsius',
+    	isStacked: false,
+    	width: 1000,
+    	height: 400,
+    	backgroundColor: {
+    		stroke: 'black',
+    		strokeWidth: 1
+    	},
+    	colors: ['red', 'grey'], //colors:['red','#004411']. // Здесь цвета для каждого графика в любом формате
+    	hAxis: { title: 'Time', titleTextStyle: { color: '#333' } },
+    	vAxis: { minValue: 0 }
+    };
+
     function drawChart() {
-        var options = {
-            title: 'Температура в градусах цельсия',
-            isStacked: false,
-            width: 1000,
-            height: 400,
-            backgroundColor: {
-                stroke: 'black',
-                strokeWidth: 1,
-            },
-            colors: ['red', 'grey'], //colors:['red','#004411']. // Здесь цвета для каждого графика в любом формате
-            hAxis: { title: 'Время', titleTextStyle: { color: '#333' } },
-            vAxis: { minValue: 0 }
-        };
+    	
 
+	    $.ajax({
+		    url: "@Url.Action("GetTemperatures")",
+		    dataType: "json",
+		    contentType: "application/json"
 
-        $.ajax({
-            url: "@Url.Action("GetTemperatures")",
-            dataType: "json",
-            contentType: "application/json"
-           
-        }).done(function (jsonData) {
-            var data = [];
-	        var i;
-	        for (i = 0; i < jsonData.length; ++i) {
-                data[i] = google.visualization.arrayToDataTable(jsonData[i].value);
-            }
+	    }).done(function(jsonData) {
+	    	var data = [];
+		    var names = [];
+		    for (var i = 0; i < jsonData.length; ++i) {
+		    	data[i] = window.google.visualization.arrayToDataTable(jsonData[i].value);
+			    names[i] = jsonData[i].name;
+		    }
 
-            for (i = 0; i < jsonData.length; ++i) {
-                $('#chart_label' + i).text("Graph for: " + jsonData[i].name);
-                var chart = new google.visualization.AreaChart(document.getElementById('chart_div' + i));
-                chart.draw(data[i], options);
-            }
-        })
+		    var width = $(".graphImage").width();
+		    window.options.width = width;
 
-      
+		    window.graphData = { Points: data, Names: names, Count: jsonData.length };
+
+		    drawGraphics(data, jsonData.length, names, window.options);
+
+	    });
+
     }
+
+    $(document).ready(function() {
+    	$(window).on("resize", function () {
+    		var width = $(".graphImage").width();
+    		window.options.width = width;
+
+    		drawGraphics(window.graphData.Points, window.graphData.Count, window.graphData.Names, window.options);
+    	});
+    });
+
+	function drawGraphics(data, count, names, options) {
+		for (var i = 0; i < count; ++i) {
+			$('#chart_label' + i).text("Graph for: " + names[i]);
+			$('#chart_div' + 0 + '.graphImage').empty()
+			var chart = new window.google.visualization.AreaChart(document.getElementById('chart_div' + i));
+			chart.draw(data[i], options);
+		}
+	}
 </script>
 
 
