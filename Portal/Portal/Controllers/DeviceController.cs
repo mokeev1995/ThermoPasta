@@ -137,6 +137,7 @@ namespace Portal.Controllers
                             _uow.CheckCodeRepository.Delete(checkCode);
                             _uow.Save();
 
+                           
                             return RedirectToAction("Index");
                         }
 

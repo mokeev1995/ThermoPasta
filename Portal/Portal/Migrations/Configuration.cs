@@ -178,17 +178,19 @@ namespace Portal.Migrations
             context.UserDevices.AddOrUpdate(d => d.Title, teapotUserDevice, poolUserDevice);
             context.SaveChanges();
 
+            var random = new Random();
+
             context.Temperatures.AddOrUpdate(t=>t.Time,
                 new Temperature
                 {
                     DeviceId = teapot.Id,
-                    Value = 53,
+                    Value = random.Next(10,100),
                     Time = DateTime.Now.AddMinutes(-2)
                 },
                 new Temperature
                 {
                     DeviceId = pool.Id,
-                    Value = 27,
+                    Value = random.Next(10,30),
                     Time = DateTime.Now.AddMinutes(-1) 
                 });
             context.SaveChanges();
