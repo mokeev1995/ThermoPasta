@@ -55,8 +55,9 @@
 	</div>
 </div>
 
-@{ Html.RenderAction("Index", "Interval", new { id = Model.Id }); }
-
+<div id="replacetarget">
+    @{ Html.RenderAction("Index", "Interval", new { id = Model.Id }); }
+</div>
 
 
 @section Scripts {
