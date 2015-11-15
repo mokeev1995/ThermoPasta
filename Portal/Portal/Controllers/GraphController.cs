@@ -23,11 +23,13 @@ namespace Portal.Controllers
 	        {
 				var userId = User.Identity.GetUserId();
 				var userData = _uow.UserDataRepository.GetById(userId);
-				var userDevices = userData.UserDevices;
+		        if (userData != null)
+		        {
+			        var userDevices = userData.UserDevices;
+					var deviceCount = userDevices.Count;
 
-				var deviceCount = userDevices.Count;
-
-		        ViewBag.DevicesCount = deviceCount;
+					ViewBag.DevicesCount = deviceCount;
+				}
 	        }
 
             return View();
