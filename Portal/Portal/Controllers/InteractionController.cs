@@ -43,6 +43,8 @@ namespace Portal.Controllers
                     _uow.CheckCodeRepository.Insert(newCheckCode);
                     _uow.Save();
 
+                    //TempData[""]
+
                     return newCode;
                 }
 

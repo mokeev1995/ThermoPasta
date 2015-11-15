@@ -56,10 +56,15 @@ namespace Portal.Controllers
             var temperatures = userDevice.Device.Temperatures.Reverse().Take(10).Reverse().ToArray();
             List<double> arguments = new List<double>();
             List<double> temperatureValues = new List<double>();
-            var extend = new double[] { 11, 12, 13, 14, 15 };
+           
             DateTime time;
             double temperature;
             var count = temperatures.Length <= 11 ? temperatures.Length : 10;
+            var extend = new double[5];
+            for (int i = 0; i < 5; i++)
+            {
+                extend[i] = i + count;
+            }
             for (var i = 0; i < count - 1; ++i)
             {
                 temperature = temperatures[i].Value;
@@ -98,7 +103,7 @@ namespace Portal.Controllers
 			double rsquare;
 			double yintercept;
 			double slope;
-			LinearRegression(arguments, values, 0, 10, out rsquare, out yintercept, out slope);
+			LinearRegression(arguments, values, 0, arguments.Length, out rsquare, out yintercept, out slope);
 			vals.Add(slope * lastArg + yintercept);
 
 			alglib.spline1dbuildakima(args.ToArray(), vals.ToArray(), out line);

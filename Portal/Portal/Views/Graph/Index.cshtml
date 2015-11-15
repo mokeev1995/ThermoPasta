@@ -65,7 +65,7 @@
 	function drawGraphics(data, count, names, options) {
 		for (var i = 0; i < count; ++i) {
 			$('#chart_label' + i).text("Graph for: " + names[i]);
-			$('#chart_div' + 0 + '.graphImage').empty()
+			//$('#chart_div' + i + '.graphImage').empty();
 			var chart = new window.google.visualization.AreaChart(document.getElementById('chart_div' + i));
 			chart.draw(data[i], options);
 		}
