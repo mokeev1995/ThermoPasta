@@ -118,12 +118,13 @@ namespace Portal.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Start,End,Description")] IntervalCreate intervalCreate)
+        public ActionResult Edit(IntervalCreate intervalCreate)
         {
             if (ModelState.IsValid)
             {
                 var interval = new Interval
                 {
+                    Id = intervalCreate.Id,
                     Description = intervalCreate.Description,
                     End = intervalCreate.End,
                     Start = intervalCreate.Start,
