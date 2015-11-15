@@ -62,17 +62,6 @@ namespace Portal.Controllers
 			DateTime time;
 			double temperature;
 
-		
-
-			//for (var i = 0; i < 10 && temperatures.Count < 10; ++i)
-			//{
-			//	temperatures.Add(new Temperature
-			//	{
-			//		Value = 0,
-			//		Time = DateTime.Now
-			//	});
-			//}
-
 			var count = temperatures.Count();
 			var extend = new double[5];
 
@@ -95,6 +84,12 @@ namespace Portal.Controllers
 				temperatureValues.Insert(0, 0D);
 				DateTime deviceTemperature;
 				DateTime temp;
+
+				if (arguments.Count > 0)
+					arguments.Add(arguments.Last() + 1);
+				else
+					arguments.Add(0);
+
 				if (temperatureValues.Count < 2)
 				{
 					deviceTemperature = DateTime.Now;
@@ -114,18 +109,13 @@ namespace Portal.Controllers
 
 					deviceTemperatures.Insert(1, new IComparable[] { temp.ToShortTimeString(), 0, null });
 				}
-				
-				if (arguments.Count > 0)
-					arguments.Add(arguments.Last() + 1);
-				else
-					arguments.Add(0);
 			}
 
 			if (count == 10)
 			{
-				temperature = temperatures[count - 1].Value;
-				time = temperatures[count - 1].Time;
-				arguments.Add(count - 1);
+				temperature = temperatures[count-1].Value;
+				time = temperatures[count-1].Time;
+				arguments.Add(count);
 				temperatureValues.Add(temperature);
 				deviceTemperatures.Add(new IComparable[] {time.ToShortTimeString(), temperature, temperature });
 			}
@@ -161,7 +151,7 @@ namespace Portal.Controllers
 			LinearRegression(arguments, values, 0, arguments.Length, out rsquare, out yintercept, out slope);
 			vals.Add(slope * lastArg + yintercept);
 
-			alglib.spline1dbuildakima(args.ToArray(), vals.ToArray(), out line);
+			alglib.spline1dbuildmonotone(args.ToArray(), vals.ToArray(), out line);
 
 			var result = new List<double>();
 			foreach (var xE in extendsArguments)
