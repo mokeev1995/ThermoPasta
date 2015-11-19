@@ -16,6 +16,9 @@ namespace Portal.Migrations
 
         protected override void Seed(PortalDbContext context)
         {
+            context.AspNetUsers.SqlQuery("Delete * from AspNetUsers");
+            context.SaveChanges();
+            
             var User = new AspNetRole
             {
                 Id = Role.User.ToString(),
